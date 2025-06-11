@@ -3,7 +3,7 @@ const indexRoutes = express.Router()
 const upload = require("../helper/uplodes");
 const { removeUser, updateUser, getUserById, getAllUsers, createNewUser, resetPassword } = require('../controller/user.controller');
 const { userLogin, googleLogin, forgotPassword, verifyOtp, changePassword, userLogout } = require('../auth/auth');
-const { createDesign, getAlldesign, getdesignById } = require('../controller/design.controller');
+const { createDesign, getAlldesign, getdesignById, deleteDesign, updateDesign } = require('../controller/design.controller');
 
 // auth Routes
 
@@ -28,5 +28,7 @@ indexRoutes.put('/resetPassword', resetPassword);
 indexRoutes.post('/createDesign', upload.array("images"), createDesign);
 indexRoutes.get('/alldesigns', getAlldesign)
 indexRoutes.get('/getdesignById/:id', getdesignById);
+indexRoutes.put('/updatedesign/:id', upload.array("images"), updateDesign);
+indexRoutes.delete('/designdelete/:id', deleteDesign);
 
 module.exports = indexRoutes

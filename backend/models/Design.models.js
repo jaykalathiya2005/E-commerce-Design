@@ -15,6 +15,9 @@ const DesignSchema = mongoose.Schema({
     description: {
         type: String,
     },
+    price: {
+        type: Number,
+    }
 }, {
     timestamps: true,
     versionKey: false

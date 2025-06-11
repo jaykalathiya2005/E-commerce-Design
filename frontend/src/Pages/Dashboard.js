@@ -1,0 +1,74 @@
+import React, { useEffect } from 'react'
+import { getAllUsers } from '../Redux/Slice/user.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { FaClock, FaHeart } from 'react-icons/fa';
+import { TbShoppingBagCheck } from "react-icons/tb";
+
+const Dashboard = () => {
+    const userId = sessionStorage.getItem('userId');
+    const singleuser = useSelector((state) => state.user.allusers)?.find((user) => user._id === userId)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getAllUsers())
+    }, [])
+    return (
+        <div>
+            {/* Header */}
+            <div className="mb-6 md:mb-8">
+                <h1 className="text-xl md:text-2xl font-semibold text-primary-dark mb-2">
+                    Hello, <span className="text-primary-dark/70">{singleuser?.userName}</span> !
+                </h1>
+                <p className="text-sm md:text-base text-gray-600">
+                    {/* max-w-3xl */}
+                    From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information.
+                    Select a link below to view or edit information.
+                </p>
+            </div>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {/* Total Order Card */}
+                <div className="bg-primary-dark/80 text-white p-4 md:p-6 rounded-lg">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xs md:text-sm font-medium text-gray-300 mb-1 md:mb-2">Total Order</h3>
+                            <p className="text-2xl md:text-3xl font-bold">3600</p>
+                        </div>
+                        <div className="bg-primary-dark/70 p-2 md:p-3 rounded-lg">
+                            <TbShoppingBagCheck className="w-6 h-6 md:w-8 md:h-8" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Pending Orders Card */}
+                <div className="bg-primary-dark/80 text-white p-4 md:p-6 rounded-lg">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xs md:text-sm font-medium text-gray-300 mb-1 md:mb-2">Pending Orders</h3>
+                            <p className="text-2xl md:text-3xl font-bold">200</p>
+                        </div>
+                        <div className="bg-primary-dark/70 p-2 md:p-3 rounded-lg">
+                            <FaClock className="w-6 h-6 md:w-8 md:h-8" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Wishlist Card */}
+                <div className="bg-primary-dark/80 text-white p-4 md:p-6 rounded-lg">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xs md:text-sm font-medium text-gray-300 mb-1 md:mb-2">Wishlist</h3>
+                            <p className="text-2xl md:text-3xl font-bold">36354</p>
+                        </div>
+                        <div className="bg-primary-dark/70 p-2 md:p-3 rounded-lg">
+                            <FaHeart className="w-6 h-6 md:w-8 md:h-8" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Dashboard

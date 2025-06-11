@@ -116,7 +116,6 @@ export const logoutUser = createAsyncThunk(
     'auth/logout',
     async (id, { dispatch, rejectWithValue }) => {
         console.log(id);
-
         try {
             const response = await axios.post(`${BASE_URL}/logout/${id}`);
             if (response.status === 200) {
@@ -242,6 +241,7 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.loggedIn = false;
                 state.isLoggedOut = true;
+                window.sessionStorage.clear();
                 state.message = action.payload?.message || "Logged out successfully";
             })
             .addCase(logoutUser.rejected, (state, action) => {

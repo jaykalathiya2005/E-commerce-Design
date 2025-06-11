@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { LuEye, LuEyeClosed } from 'react-icons/lu';
+import PhoneInput from 'react-phone-input-2';
+
 const OTPInput = ({ length = 4, onComplete, resendTimer, setResendTimer, handleVerifyOTP, handleBack, email }) => {
   const [otp, setOtp] = useState(new Array(length).fill(''));
   const [error, setError] = useState('');
@@ -167,6 +169,7 @@ const Login = () => {
   const signUpSchema = Yup.object().shape({
     userName: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
+    // phone: Yup.string().required('Phone number is required'),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
@@ -251,7 +254,7 @@ const Login = () => {
         <FormContainer isSignUp={isSignUp ? isSignUp : true}>
           {forgotPasswordStep === 0 && (
             <Formik
-              initialValues={{ userName: '', email: '', password: '', showPassword: false }}
+              initialValues={{ userName: '', email: '', password: '', phone: '', showPassword: false }}
               validationSchema={signUpSchema}
               onSubmit={(values) => {
                 dispatch(register(values)).then((response) => {
@@ -261,7 +264,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-8">
-                  <h1 className="text-2xl font-bold mb-6">Create Account</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-primary">Create Account</h1>
 
                   <div className="w-full space-y-4">
                     <div>
@@ -271,7 +274,7 @@ const Login = () => {
                         placeholder="User Name"
                         value={values.userName}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <ErrorMessage name="userName" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -283,10 +286,38 @@ const Login = () => {
                         placeholder="Email"
                         value={values.email}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
+
+                    {/* <div className="">
+                      <PhoneInput
+                        country={'in'}
+                        value={values.phone}
+                        onChange={(phone) => setFieldValue('phone', phone)}
+                        inputProps={{
+                          name: 'phone',
+                          required: true,
+                        }}
+                        inputClass="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        containerClass="w-full phone-input-container"
+                        inputStyle={{
+                          width: '100%',
+                          backgroundColor: '#f3f4f6',
+                          border: 'none'
+                        }}
+                        containerStyle={{
+                          width: '100%'
+                        }}
+                        buttonStyle={{
+                          backgroundColor: '#f3f4f6',
+                          border: 'none',
+                          borderRadius: '8px 0 0 8px'
+                        }}
+                      />
+                      <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
+                    </div> */}
 
                     <div className='relative'>
                       <Field
@@ -295,10 +326,10 @@ const Login = () => {
                         placeholder="Password"
                         value={values.password}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-primary"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);
@@ -310,7 +341,7 @@ const Login = () => {
                     </div>
                     <button
                       type="submit"
-                      className="w-full bg-black text-white rounded-lg py-2.5 font-semibold hover:bg-black transition-colors"
+                      className="w-full bg-primary text-white rounded-lg py-2.5 font-semibold hover:bg-primary transition-colors"
                     >
                       Sign Up
                     </button>
@@ -469,7 +500,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-6">
-                  <h1 className="text-2xl font-bold mb-6">Sign In</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-primary">Sign In</h1>
                   <div className="w-full space-y-4">
                     <div>
                       <Field
@@ -478,7 +509,7 @@ const Login = () => {
                         placeholder="Email"
                         value={values.email}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -490,10 +521,10 @@ const Login = () => {
                         placeholder="Password"
                         value={values.password}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-primary"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);
@@ -505,12 +536,12 @@ const Login = () => {
                     </div>
 
                     <div className="flex justify-end">
-                      <a onClick={handleForgotPassword} className="text-sm text-black hover:text-black cursor-pointer">Forgot password?</a>
+                      <a onClick={handleForgotPassword} className="text-sm text-primary hover:text-primary cursor-pointer font-medium">Forgot password?</a>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full bg-black text-white rounded-lg py-2.5 font-semibold hover:bg-black transition-colors"
+                      className="w-full bg-primary text-white rounded-lg py-2.5 font-semibold hover:bg-primary transition-colors"
                     >
                       Sign In
                     </button>
@@ -612,8 +643,8 @@ const Login = () => {
             className={`text-white relative -left-full h-full w-[200%] transform bg-black
             ${isRightPanelActive ? 'translate-x-1/2' : 'translate-x-0'} transition-transform duration-500 ease-in-out`}
             style={{
-              background: '#000000',
-              background: 'radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(168, 163, 163, 1) 50%, rgba(0, 0, 0, 1) 100%)'
+              background: '#547792',
+              background: 'radial-gradient(circle,rgba(84, 119, 146, 1) 0%, rgba(148, 180, 193, 1) 50%, rgba(84, 119, 146, 1) 100%)'
             }}
           >
 

@@ -161,6 +161,7 @@ import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAlldesign } from '../Redux/Slice/design.slice';
 import { IMAGE_URL } from '../Utils/baseUrl';
+import { FaCartShopping } from "react-icons/fa6";
 
 const Cards = ({ searchTerm = "" }) => {
     // Use objects to track state for each card by ID
@@ -176,7 +177,6 @@ const Cards = ({ searchTerm = "" }) => {
     const token = sessionStorage.getItem('token')
 
     const alldesign = useSelector((state) => state.design.allDesign);
-    console.log(alldesign);
 
     useEffect(() => {
         dispatch(getAlldesign())
@@ -263,24 +263,8 @@ const Cards = ({ searchTerm = "" }) => {
         }
     };
 
-    // Handle download
-    const handleDownload = () => {
-        if (userId && token) {
-            // Add your download logic here
-            enqueueSnackbar('Download started!', {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        } else {
-            enqueueSnackbar('Please login to download.', {
-                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        }
+    // Handle Add to cart
+    const handleAddtocart = () => {
     };
 
     // Handle share
@@ -320,7 +304,7 @@ const Cards = ({ searchTerm = "" }) => {
         return () => document.removeEventListener('keydown', handleKeyPress);
     }, [viewMode, selectedDesign]);
 
-    const filteredCards = alldesign.filter(card =>
+    const filteredCards = alldesign?.filter(card =>
         card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         card.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -328,59 +312,55 @@ const Cards = ({ searchTerm = "" }) => {
     // Render single design view
     if (viewMode === 'single' && selectedDesign) {
         return (
-            <div className="min-h-screen bg-gray-50">
-                {/* Header */}
-                <div className="bg-white shadow-sm border-b sticky top-0 z-10">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
+            <div className="h-[calc(100vh-125px)] md:h-[calc(100vh-65px)] bg-primary-light/70">
+                {/* Main Content */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        <button
+                            onClick={backToGrid}
+                            className="flex items-center gap-2 text-primary hover:text-primary-dark transition-colors"
+                        >
+                            <FaArrowLeft />
+                            <span>Back to Gallery</span>
+                        </button>
+
+                        <div className="flex items-center gap-4">
                             <button
-                                onClick={backToGrid}
-                                className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+                                onClick={() => toggleHeart(selectedDesign._id)}
+                                className={`p-2 rounded-full transition-all ${heartStates[selectedDesign._id]
+                                    ? 'bg-red-50 text-red-600'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
+                                    }`}
                             >
-                                <FaArrowLeft />
-                                <span>Back to Gallery</span>
+                                <FaRegHeart className="text-lg" />
                             </button>
 
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => toggleHeart(selectedDesign._id)}
-                                    className={`p-2 rounded-full transition-all ${heartStates[selectedDesign._id]
-                                        ? 'bg-red-50 text-red-600'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
-                                        }`}
-                                >
-                                    <FaRegHeart className="text-lg" />
-                                </button>
+                            <button
+                                onClick={() => toggleBookmark(selectedDesign._id)}
+                                className={`p-2 rounded-full transition-all ${bookmarkStates[selectedDesign._id]
+                                    ? 'bg-blue-50 text-blue-600'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                                    }`}
+                            >
+                                <FaRegBookmark className="text-lg" />
+                            </button>
 
-                                <button
-                                    onClick={() => toggleBookmark(selectedDesign._id)}
-                                    className={`p-2 rounded-full transition-all ${bookmarkStates[selectedDesign._id]
-                                        ? 'bg-blue-50 text-blue-600'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-                                        }`}
-                                >
-                                    <FaRegBookmark className="text-lg" />
-                                </button>
-
-                                <button
-                                    onClick={handleShare}
-                                    className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                                >
-                                    <FaShare className="text-lg" />
-                                </button>
-                            </div>
+                            <button
+                                onClick={handleShare}
+                                className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                            >
+                                <FaShare className="text-lg" />
+                            </button>
                         </div>
                     </div>
                 </div>
-
-                {/* Main Content */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Image Section */}
                         <div className="lg:col-span-2">
-                            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                            <div className="bg-primary/70 rounded-2xl shadow-sm overflow-hidden">
                                 {/* Image Display */}
-                                <div className="relative bg-gray-100 aspect-video min-h-[500px]">
+                                <div className="relative flex items-center justify-center w-full h-[500px]">
                                     {/* flex items-center justify-center */}
                                     {selectedDesign.images && selectedDesign.images.length > 0 && (
                                         <>
@@ -391,7 +371,7 @@ const Cards = ({ searchTerm = "" }) => {
                                             />
 
                                             {/* Navigation Arrows */}
-                                            {/* {selectedDesign.images.length > 1 && (
+                                            {selectedDesign.images.length > 1 && (
                                                 <>
                                                     <button
                                                         onClick={prevImage}
@@ -401,12 +381,12 @@ const Cards = ({ searchTerm = "" }) => {
                                                     </button>
                                                     <button
                                                         onClick={nextImage}
-                                                        className="absolute right-20 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
+                                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
                                                     >
                                                         <FaChevronRight className="text-gray-700" />
                                                     </button>
                                                 </>
-                                            )} */}
+                                            )}
 
                                             {/* Image Counter */}
                                             {selectedDesign.images.length > 1 && (
@@ -417,18 +397,19 @@ const Cards = ({ searchTerm = "" }) => {
                                         </>
                                     )}
                                 </div>
-
+                            </div>
+                            <div className="rounded-2xl overflow-hidden">
                                 {/* Image Thumbnails */}
                                 {selectedDesign.images && selectedDesign.images.length > 1 && (
-                                    <div className="p-4 border-t">
+                                    <div className="py-4">
                                         <div className="flex gap-2 overflow-x-auto">
                                             {selectedDesign.images.map((image, index) => (
                                                 <button
                                                     key={index}
                                                     onClick={() => setCurrentImageIndex(index)}
                                                     className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${index === currentImageIndex
-                                                        ? 'border-blue-500'
-                                                        : 'border-gray-200 hover:border-gray-300'
+                                                        ? 'border-primary-dark'
+                                                        : 'border-primary hover:border-light/70'
                                                         }`}
                                                 >
                                                     <img
@@ -448,33 +429,31 @@ const Cards = ({ searchTerm = "" }) => {
                         <div className="space-y-6">
                             {/* Title and Description */}
                             <div className="bg-white rounded-2xl shadow-sm p-6">
-                                <h1 className="text-3xl font-bold text-gray-900 mb-4">{selectedDesign.title}</h1>
-                                <p className="text-gray-600 text-lg leading-relaxed">{selectedDesign.description}</p>
+                                <h1 className="text-2xl font-bold text-gray-900 mb-4">{selectedDesign.title}</h1>
+                                <p className="text-gray-600 text-md leading-relaxed">{selectedDesign.description}</p>
                             </div>
 
                             {/* Download Button */}
-                            <div className="bg-white rounded-2xl shadow-sm p-6">
-                                <button
-                                    onClick={handleDownload}
-                                    className="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-3"
-                                >
-                                    <FaDownload />
-                                    Download Design
-                                </button>
-                            </div>
+                            <button
+                                onClick={handleAddtocart}
+                                className="w-full bg-primary-dark text-white py-3 rounded-xl font-semibold text-lg hover:bg-primary-dark transition-colors flex items-center justify-center gap-3"
+                            >
+                                <FaCartShopping />
+                                Add To Cart
+                            </button>
 
                             {/* Design Details */}
-                            <div className="bg-white rounded-2xl shadow-sm p-6">
+                            {/* <div className="bg-white rounded-2xl shadow-sm p-6">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Design Details</h3>
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <span className="text-gray-600">Images</span>
                                         <span className="font-medium">{selectedDesign.images?.length || 0}</span>
                                     </div>
-                                    {/* <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between">
                                         <span className="text-gray-600">Category</span>
                                         <span className="font-medium">{selectedDesign.category || 'Design'}</span>
-                                    </div> */}
+                                    </div>
                                     {selectedDesign.createdAt && (
                                         <div className="flex items-center justify-between">
                                             <span className="text-gray-600">Created</span>
@@ -484,7 +463,7 @@ const Cards = ({ searchTerm = "" }) => {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Tags */}
                             {selectedDesign.tags && selectedDesign.tags.length > 0 && (
@@ -505,12 +484,12 @@ const Cards = ({ searchTerm = "" }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     }
 
     return (
-        <div className="p-8 min-h-screen bg-gray-100">
+        <div className="p-8 overflow-y-scroll bg-primary-light/70 h-[calc(100vh-65px)] scrollbar-hide">
             {filteredCards.length === 0 ? (
                 <div className='flex justify-center items-center min-h-[400px]'>
                     <div className='text-center'>
