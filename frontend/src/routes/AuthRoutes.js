@@ -7,6 +7,7 @@ import Order from '../Pages/Order'
 import Design from '../Pages/Design/Design'
 import Createdesign from '../Pages/Design/Createdesign'
 import ProtectedRoute from './ProtectedRoute'
+import Wishlist from '../Pages/Wishlist'
 
 export default function AuthRoutes() {
     return (
@@ -17,6 +18,7 @@ export default function AuthRoutes() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/Order" element={<Order />} />
+                        <Route path="/wishlist" element={<Wishlist />} />
                         <Route path="/design" element={<Design />} />
                         <Route path="/add-design" element={<Createdesign />} />
                     </Routes>

@@ -17,7 +17,15 @@ const DesignSchema = mongoose.Schema({
     },
     price: {
         type: Number,
-    }
+    },
+    isLiked: {
+        type: Boolean,
+        default: false
+    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }]
 }, {
     timestamps: true,
     versionKey: false

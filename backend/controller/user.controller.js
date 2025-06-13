@@ -180,3 +180,50 @@ exports.resetPassword = async (req, res) => {
         console.log(error);
     }
 };
+
+exports.addToWishlist = async (req, res) => {
+    const { _id } = req.user;
+    const { designId } = req.body;
+    try {
+        // console.log(prodId);
+        const userdata = await user.findById(_id);
+        const alreadyadded = userdata.wishlist.find((id) => id.toString() === designId);
+        if (alreadyadded) {
+            let userdata = await user.findByIdAndUpdate(_id, {
+                $pull: { wishlist: designId },
+            }, { new: true });
+            res.status(200).json({
+                status: 200,
+                message: "Remove SuccessFully...",
+                user: userdata,
+            });
+        } else {
+            let userdata = await user.findByIdAndUpdate(_id, {
+                $push: { wishlist: designId },
+            }, { new: true });
+            res.status(200).json({
+                status: 200,
+                message: "Added SuccessFully...",
+                user: userdata,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log(error);
+    }
+};
+
+exports.getWishList = async (req, res) => {
+    const { _id } = req.user;
+    try {
+        const findUser = await user.findById(_id).populate('wishlist');
+        // res.json(findUser);
+        return res.status(200).json({
+            status: 200,
+            user: findUser,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log(error);
+    }
+};

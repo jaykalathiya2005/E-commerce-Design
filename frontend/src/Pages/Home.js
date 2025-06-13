@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Component/Header';
-import Cards from '../Component/Cards';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { getAlldesign } from '../Redux/Slice/design.slice';
-import { FaArrowLeft, FaChevronLeft, FaChevronRight, FaRegBookmark, FaRegHeart, FaShare } from 'react-icons/fa';
+import { getAlldesign, likeDesign } from '../Redux/Slice/design.slice';
+import { FaBookmark, FaHeart, FaRegBookmark } from 'react-icons/fa';
 import { IMAGE_URL } from '../Utils/baseUrl';
-import { FaCartShopping } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
+import { addToWishList, getUserWishList } from '../Redux/Slice/user.slice';
 
 const Home = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    // Use objects to track state for each card by ID
-    const [heartStates, setHeartStates] = useState({});
-    const [bookmarkStates, setBookmarkStates] = useState({});
-    const [selectedDesign, setSelectedDesign] = useState(null);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'single'
-    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -25,332 +17,49 @@ const Home = () => {
     const token = sessionStorage.getItem('token')
 
     const alldesign = useSelector((state) => state.design.allDesign);
+    const userWishlist = useSelector((state) => state?.user?.userWishList?.user?.wishlist);
 
     useEffect(() => {
         dispatch(getAlldesign())
+        if (token) {
+            dispatch(getUserWishList())
+        }
     }, [])
 
     // Function to toggle heart state for specific card
-    const toggleHeart = (cardId) => {
-        if (userId && token) {
-            setHeartStates(prev => ({
-                ...prev,
-                [cardId]: !prev[cardId]
-            }));
-            const action = heartStates[cardId] ? 'Removed from favorites' : 'Added to favorites';
-            enqueueSnackbar(action, {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        } else {
-            enqueueSnackbar('Please login to like this.', {
-                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-            return;
-        }
+    const toggleHeart = (likeId) => {
+        dispatch(likeDesign(likeId));
     };
 
     // Function to toggle bookmark state for specific card
-    const toggleBookmark = (cardId) => {
-        if (userId && token) {
-            setBookmarkStates(prev => ({
-                ...prev,
-                [cardId]: !prev[cardId]
-            }));
-            const action = bookmarkStates[cardId] ? 'Removed from wishlist' : 'Added to wishlist';
-            enqueueSnackbar(action, {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        } else {
-            enqueueSnackbar('Please login to add in wishlist.', {
-                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-            return;
-        }
+    const toggleBookmark = (wishlistId) => {
+        dispatch(addToWishList(wishlistId));
     };
 
     // Function to open single design view
     const openSingleView = (design) => {
         navigate(`/design/${design._id}`, { state: design });
-        // setSelectedDesign(design);
-        // setCurrentImageIndex(0);
-        // setViewMode('single');
     };
-
-    // Function to go back to grid view
-    const backToGrid = () => {
-        setViewMode('grid');
-        setSelectedDesign(null);
-        setCurrentImageIndex(0);
-    };
-
-    // Function to navigate images
-    const nextImage = () => {
-        if (selectedDesign && selectedDesign.images) {
-            setCurrentImageIndex((prev) =>
-                prev === selectedDesign.images.length - 1 ? 0 : prev + 1
-            );
-        }
-    };
-
-    const prevImage = () => {
-        if (selectedDesign && selectedDesign.images) {
-            setCurrentImageIndex((prev) =>
-                prev === 0 ? selectedDesign.images.length - 1 : prev - 1
-            );
-        }
-    };
-
-    // Handle Add to cart
-    const handleAddtocart = () => {
-    };
-
-    // Handle share
-    const handleShare = () => {
-        if (navigator.share && selectedDesign) {
-            navigator.share({
-                title: selectedDesign.title,
-                text: selectedDesign.description,
-                url: window.location.href
-            });
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            enqueueSnackbar('Link copied to clipboard!', {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        }
-    };
-
-    // Handle keyboard navigation
-    useEffect(() => {
-        const handleKeyPress = (e) => {
-            if (viewMode === 'single') {
-                if (e.key === 'ArrowLeft') {
-                    prevImage();
-                } else if (e.key === 'ArrowRight') {
-                    nextImage();
-                } else if (e.key === 'Escape') {
-                    backToGrid();
-                }
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyPress);
-        return () => document.removeEventListener('keydown', handleKeyPress);
-    }, [viewMode, selectedDesign]);
 
     const filteredCards = alldesign?.filter(card =>
         card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         card.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Render single design view
-    if (viewMode === 'single' && selectedDesign) {
-        return (
-            <div className="">
-                <Header />
-                <div className="h-[calc(100vh-125px)] md:h-[calc(100vh-65px)] bg-primary-light/70">
-                    {/* Main Content */}
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <button
-                                onClick={backToGrid}
-                                className="flex items-center gap-2 text-primary hover:text-primary-dark transition-colors"
-                            >
-                                <FaArrowLeft />
-                                <span>Back to Gallery</span>
-                            </button>
-
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => toggleHeart(selectedDesign._id)}
-                                    className={`p-2 rounded-full transition-all ${heartStates[selectedDesign._id]
-                                        ? 'bg-red-50 text-red-600'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
-                                        }`}
-                                >
-                                    <FaRegHeart className="text-lg" />
-                                </button>
-
-                                <button
-                                    onClick={() => toggleBookmark(selectedDesign._id)}
-                                    className={`p-2 rounded-full transition-all ${bookmarkStates[selectedDesign._id]
-                                        ? 'bg-blue-50 text-blue-600'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-                                        }`}
-                                >
-                                    <FaRegBookmark className="text-lg" />
-                                </button>
-
-                                <button
-                                    onClick={handleShare}
-                                    className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                                >
-                                    <FaShare className="text-lg" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {/* Image Section */}
-                            <div className="lg:col-span-2">
-                                <div className="bg-primary/70 rounded-2xl shadow-sm overflow-hidden">
-                                    {/* Image Display */}
-                                    <div className="relative flex items-center justify-center w-full h-[500px]">
-                                        {/* flex items-center justify-center */}
-                                        {selectedDesign.images && selectedDesign.images.length > 0 && (
-                                            <>
-                                                <img
-                                                    src={`${IMAGE_URL}${selectedDesign.images[currentImageIndex]}`}
-                                                    alt={`${selectedDesign.title} - Image ${currentImageIndex + 1}`}
-                                                    className="max-w-full max-h-full object-contain"
-                                                />
-
-                                                {/* Navigation Arrows */}
-                                                {selectedDesign.images.length > 1 && (
-                                                    <>
-                                                        <button
-                                                            onClick={prevImage}
-                                                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
-                                                        >
-                                                            <FaChevronLeft className="text-gray-700" />
-                                                        </button>
-                                                        <button
-                                                            onClick={nextImage}
-                                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
-                                                        >
-                                                            <FaChevronRight className="text-gray-700" />
-                                                        </button>
-                                                    </>
-                                                )}
-
-                                                {/* Image Counter */}
-                                                {selectedDesign.images.length > 1 && (
-                                                    <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                                                        {currentImageIndex + 1} / {selectedDesign.images.length}
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="rounded-2xl overflow-hidden">
-                                    {/* Image Thumbnails */}
-                                    {selectedDesign.images && selectedDesign.images.length > 1 && (
-                                        <div className="py-4">
-                                            <div className="flex gap-2 overflow-x-auto">
-                                                {selectedDesign.images.map((image, index) => (
-                                                    <button
-                                                        key={index}
-                                                        onClick={() => setCurrentImageIndex(index)}
-                                                        className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${index === currentImageIndex
-                                                            ? 'border-primary-dark'
-                                                            : 'border-primary hover:border-light/70'
-                                                            }`}
-                                                    >
-                                                        <img
-                                                            src={`${IMAGE_URL}${image}`}
-                                                            alt={`Thumbnail ${index + 1}`}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Info Section */}
-                            <div className="space-y-6">
-                                {/* Title and Description */}
-                                <div className="bg-white rounded-2xl shadow-sm p-6">
-                                    <h1 className="text-2xl font-bold text-gray-900 mb-4">{selectedDesign.title}</h1>
-                                    <p className="text-gray-600 text-md leading-relaxed">{selectedDesign.description}</p>
-                                </div>
-
-                                {/* Download Button */}
-                                <button
-                                    onClick={handleAddtocart}
-                                    className="w-full bg-primary-dark text-white py-3 rounded-xl font-semibold text-lg hover:bg-primary-dark transition-colors flex items-center justify-center gap-3"
-                                >
-                                    <FaCartShopping />
-                                    Add To Cart
-                                </button>
-
-                                {/* Design Details */}
-                                {/* <div className="bg-white rounded-2xl shadow-sm p-6">
-                              <h3 className="text-lg font-semibold text-gray-900 mb-4">Design Details</h3>
-                              <div className="space-y-3">
-                                  <div className="flex items-center justify-between">
-                                      <span className="text-gray-600">Images</span>
-                                      <span className="font-medium">{selectedDesign.images?.length || 0}</span>
-                                  </div>
-                                  <div className="flex items-center justify-between">
-                                      <span className="text-gray-600">Category</span>
-                                      <span className="font-medium">{selectedDesign.category || 'Design'}</span>
-                                  </div>
-                                  {selectedDesign.createdAt && (
-                                      <div className="flex items-center justify-between">
-                                          <span className="text-gray-600">Created</span>
-                                          <span className="font-medium">
-                                              {new Date(selectedDesign.createdAt).toLocaleDateString()}
-                                          </span>
-                                      </div>
-                                  )}
-                              </div>
-                          </div> */}
-
-                                {/* Tags */}
-                                {selectedDesign.tags && selectedDesign.tags.length > 0 && (
-                                    <div className="bg-white rounded-2xl shadow-sm p-6">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedDesign.tags.map((tag, index) => (
-                                                <span
-                                                    key={index}
-                                                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div >
-            </div>
-        );
-    }
-
     return (
         <div>
-            <Header setSearchTerm={setSearchTerm} />
+            <div className="shadow z-10 sticky top-0" style={{ boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)' }}>
+                <Header setSearchTerm={setSearchTerm} />
+            </div>
             {/* {showProfile ? <Profile setShowProfile={setShowProfile} /> : <Cards searchTerm={searchTerm} />} */}
             {/* <Cards searchTerm={searchTerm} /> */}
-            <div className="p-8 overflow-y-scroll bg-primary-light/70 h-[calc(100vh-65px)] scrollbar-hide">
-                {filteredCards.length === 0 ? (
+            {/* <div className="p-8 overflow-y-scroll bg-primary-light/70 h-[calc(100vh-65px)] scrollbar-hide"> */}
+            <div className="p-8 overflow-y-scroll bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[calc(100vh-65px)] scrollbar-hide">
+                {filteredCards?.length === 0 ? (
                     <div className='flex justify-center items-center min-h-[400px]'>
                         <div className='text-center'>
-                            <div className="text-black font-bold text-[20px]">No results found. 😀</div>
-                            <p className="text-gray-400 text-[15px] mt-2">It seems we can't find any results based on your search.</p>
+                            <div className="text-primary-dark font-bold text-[20px]">No results found. 😀</div>
+                            <p className="text-primary-light font-medium text-[15px] mt-2">It seems we can't find any results based on your search.</p>
                         </div>
                     </div>
                 ) : (
@@ -363,7 +72,7 @@ const Home = () => {
                             columnFill: 'balance'
                         }}
                     >
-                        {filteredCards.map((cardItem, index) => {
+                        {filteredCards?.map((cardItem, index) => {
                             return (
                                 <div
                                     key={index}
@@ -390,16 +99,16 @@ const Home = () => {
                                                 <div className="text-[13px] opacity-80 line-clamp-1">{cardItem.description}</div>
                                             </div>
                                             <div className="flex gap-3 text-lg flex-shrink-0">
-                                                <FaRegHeart
-                                                    className={`hover:scale-110 transition-all duration-200 cursor-pointer ${heartStates[cardItem._id] ? 'text-red-400' : 'hover:text-red-400'
+                                                <FaHeart
+                                                    className={`hover:scale-110 transition-all duration-200 cursor-pointer ${cardItem.likes.includes(userId) ? 'text-red-600' : 'hover:text-red-600'
                                                         }`}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         toggleHeart(cardItem._id);
                                                     }}
                                                 />
-                                                <FaRegBookmark
-                                                    className={`hover:scale-110 transition-all duration-200 cursor-pointer ${bookmarkStates[cardItem._id] ? 'text-blue-400' : 'hover:text-blue-400'
+                                                <FaBookmark
+                                                    className={`hover:scale-110 transition-all duration-200 cursor-pointer ${userWishlist?.find((design) => design._id === cardItem._id) ? 'text-blue-600' : 'hover:text-blue-600'
                                                         }`}
                                                     onClick={(e) => {
                                                         e.stopPropagation();

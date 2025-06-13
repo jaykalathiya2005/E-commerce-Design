@@ -15,7 +15,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { TbShoppingBagCheck } from "react-icons/tb";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
-import { FaAngleUp } from "react-icons/fa";
+import { FaAngleUp, FaBookmark } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserById } from '../Redux/Slice/user.slice';
 import { FiPlusSquare, FiUser } from 'react-icons/fi';
@@ -79,6 +79,7 @@ function Layout({ children }) {
         { title: 'My Profile', icon: <FiUser />, path: '/profile' },
         { title: 'Order', icon: <TbShoppingBagCheck />, path: '/order' },
         { title: 'Design', icon: <FiPlusSquare />, path: '/design' },
+        { title: 'Wishlist', icon: <FaBookmark />, path: '/wishlist' },
         { title: 'Logout', icon: <IoMdLogOut />, onclick: handleLogout },
     ]
 
@@ -225,6 +226,7 @@ function Layout({ children }) {
             <Box
                 component="main"
                 sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` }, flex: 1, p: 4, md: { p: 6 }, lg: { p: 8 } }}
+            // sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` }, flex: 1, p: 4, md: { p: 6 }, lg: { p: 8 }, background: 'linear-gradient(to right, #6B46C1, #D946EF, #6B46C1)' }}
             >
                 <Toolbar />
                 {children}

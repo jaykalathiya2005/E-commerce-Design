@@ -101,8 +101,8 @@ const Createdesign = () => {
 
 
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-                <div className="mx-auto bg-primary-light">
-                    <div className="mx-auto bg-primary-light rounded-lg">
+                <div className="mx-auto">
+                    <div className="mx-auto rounded-lg">
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 2xl:grid-cols-12 gap-4">
                             {values?.images?.map((img, index) => (
                                 <div key={index} className="relative group col-span-1">
@@ -128,8 +128,8 @@ const Createdesign = () => {
                                 className="aspect-square bg-primary-dark/60 rounded-lg border-2 border-dashed border-primary-dark hover:border-primary-dark transition-colors cursor-pointer flex flex-col items-center justify-center group hover:bg-bg-primary-dark/80"
                                 onClick={handleFileInput}
                             >
-                                <div className="flex flex-col items-center group-hover:text-bg-primary-dark/60 text-primary-light">
-                                    <div className="bg-gray-100 group-hover:bg-gray-200 rounded-full p-3 mb-2">
+                                <div className="flex flex-col items-center group-hover:text-bg-primary-dark/60 text-primary">
+                                    <div className="bg-primary-dark rounded-full p-3 mb-2">
                                         <FaUpload size={20} />
                                     </div>
                                     <span className="text-sm font-medium">Add Image</span>
@@ -165,7 +165,7 @@ const Createdesign = () => {
                             value={values.title}
                             onChange={handleChange}
                             placeholder="Enter Your Design Title"
-                            className={`w-full px-3 md:px-4 py-2 bg-primary-dark/80 text-white placeholder:text-white md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.title && touched.title
+                            className={`w-full px-3 md:px-4 py-2 bg-primary-light text-white placeholder:text-white md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.title && touched.title
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -184,7 +184,7 @@ const Createdesign = () => {
                             value={values.description}
                             onChange={handleChange}
                             placeholder="Enter Your Design Description"
-                            className={`w-full px-3 md:px-4 py-2 md:py-3 bg-primary-dark/80 text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.description && touched.description
+                            className={`w-full px-3 md:px-4 py-2 md:py-3 bg-primary-light text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.description && touched.description
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -203,7 +203,7 @@ const Createdesign = () => {
                             value={values.price}
                             onChange={handleChange}
                             placeholder="Enter Your Design price"
-                            className={`w-full px-3 md:px-4 py-2 bg-primary-dark/80 text-white placeholder:text-white md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.price && touched.price
+                            className={`w-full px-3 md:px-4 py-2 bg-primary-light text-white placeholder:text-white md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.price && touched.price
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -227,7 +227,7 @@ const Createdesign = () => {
                     </button>
                     <button
                         type="submit"
-                        className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark text-white rounded-full hover:bg-primary-dark/90 transition-colors font-medium text-sm md:text-base"
+                        className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-light/90 text-white rounded-full hover:bg-primary-light transition-colors font-medium text-sm md:text-base"
                     >
                         {id ? "update" : "Submit"}
                     </button>

@@ -1,4 +1,5 @@
 const design = require('../models/Design.models');
+const Cart = require('../models/cart.models');
 
 exports.createDesign = async (req, res) => {
     try {
@@ -154,5 +155,132 @@ exports.updateDesign = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ status: 500, success: false, message: error.message });
+    }
+};
+
+exports.likeDesign = async (req, res) => {
+    const { designId } = req.body;
+    console.log(designId)
+    const Design = await design.findById(designId)
+
+    if (!Design) {
+        return res.status(404).json({ status: 404, success: false, message: "Not allow for like this Design." });
+    }
+    const loginUserId = req?.user?._id;
+
+    // const isLiked = Design?.isLiked
+    const alreadyadded = Design.likes.includes(loginUserId);
+    console.log(alreadyadded);
+
+
+    if (alreadyadded) {
+        const Design = await design.findByIdAndUpdate(designId, {
+            $pull: { likes: loginUserId },
+            isLiked: false
+        }, { new: true });
+        res.status(200).json({
+            status: 200,
+            message: "Remove SuccessFully...",
+            Design: Design,
+        });
+    } else {
+        const Design = await design.findByIdAndUpdate(designId, {
+            $push: { likes: loginUserId },
+            isLiked: true
+        }, { new: true });
+        res.status(200).json({
+            status: 200,
+            message: "Added SuccessFully...",
+            Design: Design,
+        });
+    }
+};
+
+exports.addToCart = async (req, res) => {
+    const { designId, quantity, price } = req.body;
+    const { _id } = req.user;
+    try {
+        let newCart = await new Cart({
+            userId: _id,
+            designId,
+            quantity,
+            price
+        }).save();
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: "Item added to cart",
+            newCart
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+exports.getCart = async (req, res) => {
+    const { _id } = req.user;
+    try {
+        // const cart = await Cart.find({ userId: _id }).populate("designId");
+        const cart = await Cart.aggregate([
+            {
+                $match: { userId: _id }
+            },
+            {
+                $lookup: {
+                    from: "designs", // This should match your design collection name
+                    localField: "designId",
+                    foreignField: "_id",
+                    as: "designData"
+                }
+            },
+            {
+                $unwind: "$designData"
+            }
+        ]);
+        // res.json(cart);
+        res.status(200).json({
+            status: 200,
+            success: true,
+            cart
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+exports.removedesignCart = async (req, res) => {
+    const { _id } = req.user;
+    const { cartItemId } = req.body;
+    try {
+
+        const deleteProdFromCart = await Cart.deleteOne({ userId: _id, _id: cartItemId })
+        // res.json(deleteProdFromCart);
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'cart item delete',
+            deleteProdFromCart
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+exports.updateQuentityFromCart = async (req, res) => {
+    const { _id } = req.user;
+    const { cartItemId, newQuantity } = req.body;
+    try {
+        const cartItem = await Cart.findOne({ userId: _id, _id: cartItemId })
+        cartItem.quantity = Math.max(1, cartItem.quantity + newQuantity);
+        cartItem.save();
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'cart item update',
+            cartItem
+        });
+    } catch (error) {
+        throw new Error(error);
     }
 };

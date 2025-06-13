@@ -264,7 +264,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-8">
-                  <h1 className="text-2xl font-bold mb-6 text-primary">Create Account</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-primary-dark">Create Account</h1>
 
                   <div className="w-full space-y-4">
                     <div>
@@ -341,7 +341,7 @@ const Login = () => {
                     </div>
                     <button
                       type="submit"
-                      className="w-full bg-primary text-white rounded-lg py-2.5 font-semibold hover:bg-primary transition-colors"
+                      className="w-full bg-primary-dark text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Sign Up
                     </button>
@@ -500,7 +500,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-6">
-                  <h1 className="text-2xl font-bold mb-6 text-primary">Sign In</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-primary-dark">Sign In</h1>
                   <div className="w-full space-y-4">
                     <div>
                       <Field
@@ -541,7 +541,7 @@ const Login = () => {
 
                     <button
                       type="submit"
-                      className="w-full bg-primary text-white rounded-lg py-2.5 font-semibold hover:bg-primary transition-colors"
+                      className="w-full bg-primary-dark text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Sign In
                     </button>
@@ -640,12 +640,12 @@ const Login = () => {
         <div className={`absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-500 ease-in-out z-50
           ${isMobile ? 'hidden' : `${isRightPanelActive ? '-translate-x-full' : ''}`}`}>
           <div
-            className={`text-white relative -left-full h-full w-[200%] transform bg-black
+            className={`text-white relative -left-full h-full w-[200%] transform bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-400
             ${isRightPanelActive ? 'translate-x-1/2' : 'translate-x-0'} transition-transform duration-500 ease-in-out`}
-            style={{
-              background: '#547792',
-              background: 'radial-gradient(circle,rgba(84, 119, 146, 1) 0%, rgba(148, 180, 193, 1) 50%, rgba(84, 119, 146, 1) 100%)'
-            }}
+          // style={{
+          //   background: '#547792',
+          //   background: 'radial-gradient(circle,rgba(84, 119, 146, 1) 0%, rgba(148, 180, 193, 1) 50%, rgba(84, 119, 146, 1) 100%)'
+          // }}
           >
 
             {/* Left Overlay Panel */}

@@ -96,7 +96,7 @@ const Order = () => {
                     </thead>
                     <tbody className="divide-y divide-primary-dark">
                         {currentOrders.map((order, index) => (
-                            <tr key={index} className="bg-primary-light text-primary-dark">
+                            <tr key={index} className="bg-primary-dark/10 text-primary-dark">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                         <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-600 rounded"></div>

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { FaRegBookmark, FaRegHeart, FaArrowLeft, FaChevronLeft, FaChevronRight, FaDownload, FaShare, FaUser, FaCalendar } from 'react-icons/fa'
+import { FaRegBookmark, FaRegHeart, FaArrowLeft, FaChevronLeft, FaChevronRight, FaDownload, FaShare, FaUser, FaCalendar, FaHeart, FaBookmark, FaMinus, FaPlus } from 'react-icons/fa'
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAlldesign, getdesignById } from '../Redux/Slice/design.slice';
+import { addToCart, getAlldesign, getdesignById, likeDesign } from '../Redux/Slice/design.slice';
 import { IMAGE_URL } from '../Utils/baseUrl';
 import { FaCartShopping } from 'react-icons/fa6';
 import Header from '../Component/Header';
+import { addToWishList, getUserWishList } from '../Redux/Slice/user.slice';
 
 const SingleDesignPage = () => {
     const navigate = useNavigate();
     const { id } = useParams()
     const { enqueueSnackbar } = useSnackbar();
+    const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
-    const { state } = useLocation();
 
     const SingleDesign = useSelector((state) => state.design.currDesign)
 
@@ -22,8 +23,6 @@ const SingleDesignPage = () => {
     }, [])
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [heartStates, setHeartStates] = useState({});
-    const [bookmarkStates, setBookmarkStates] = useState({});
     const [design, setDesign] = useState(null);
     // const design = state;
     const [loading, setLoading] = useState(true);
@@ -33,63 +32,31 @@ const SingleDesignPage = () => {
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
-        const founddesign = state ? state : SingleDesign
+        const founddesign = SingleDesign
         if (founddesign) {
             setDesign(founddesign);
             setLoading(false);
         } else {
             setLoading(false);
         }
-    }, [state, SingleDesign]);
+    }, [SingleDesign]);
+
+    const userWishlist = useSelector((state) => state?.user?.userWishList?.user?.wishlist)
+
+    useEffect(() => {
+        if (token) {
+            dispatch(getUserWishList())
+        }
+    }, [])
 
     // Function to toggle heart state for specific card
-    const toggleHeart = (cardId) => {
-        if (userId && token) {
-            setHeartStates(prev => ({
-                ...prev,
-                [cardId]: !prev[cardId]
-            }));
-            const action = heartStates[cardId] ? 'Removed from favorites' : 'Added to favorites';
-            enqueueSnackbar(action, {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        } else {
-            enqueueSnackbar('Please login to like this.', {
-                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-            return;
-        }
+    const toggleHeart = (likeId) => {
+        dispatch(likeDesign(likeId)).then(() => dispatch(getdesignById(id)));
     };
 
     // Function to toggle bookmark state for specific card
-    const toggleBookmark = (cardId) => {
-        if (userId && token) {
-            setBookmarkStates(prev => ({
-                ...prev,
-                [cardId]: !prev[cardId]
-            }));
-            const action = bookmarkStates[cardId] ? 'Removed from wishlist' : 'Added to wishlist';
-            enqueueSnackbar(action, {
-                variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-        } else {
-            enqueueSnackbar('Please login to add in wishlist.', {
-                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                }
-            });
-            return;
-        }
+    const toggleBookmark = (wishlistId) => {
+        dispatch(addToWishList(wishlistId));
     };
 
     // Function to navigate images
@@ -172,6 +139,12 @@ const SingleDesignPage = () => {
 
     const backToHome = () => {
         navigate('/')
+    }
+
+    const handleAddtocart = () => {
+        if (userId || token) {
+            dispatch(addToCart({ designId: design._id, quantity, price: design.price }))
+        }
     }
 
     return (
@@ -346,15 +319,18 @@ const SingleDesignPage = () => {
         //     </div>
         // </div>
         <div className="">
-            <Header />
+            <div className="shadow z-10 sticky top-0" style={{ boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)' }}>
+                <Header />
+            </div>
 
-            <div className="h-[calc(100vh-125px)] md:h-[calc(100vh-65px)] bg-primary-light/70">
+            {/* <div className="h-[calc(100vh-125px)] md:h-[calc(100vh-65px)] bg-primary-light/70"> */}
+            <div className="h-[calc(100vh-65px)] bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400">
                 {/* Main Content */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <button
                             onClick={backToHome}
-                            className="flex items-center gap-2 text-primary hover:text-primary-dark transition-colors"
+                            className="flex items-center gap-2 text-primary-light hover:text-primary-dark transition-all duration-300 font-medium"
                         >
                             <FaArrowLeft />
                             <span>Back to Gallery</span>
@@ -363,22 +339,22 @@ const SingleDesignPage = () => {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => toggleHeart(design._id)}
-                                className={`p-2 rounded-full transition-all ${heartStates[design._id]
+                                className={`p-2 rounded-full transition-all ${design.likes.includes(userId)
                                     ? 'bg-red-50 text-red-600'
                                     : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
                                     }`}
                             >
-                                <FaRegHeart className="text-lg" />
+                                <FaHeart className="text-lg" />
                             </button>
 
                             <button
                                 onClick={() => toggleBookmark(design._id)}
-                                className={`p-2 rounded-full transition-all ${bookmarkStates[design._id]
+                                className={`p-2 rounded-full transition-all ${userWishlist?.find((d) => d._id === design._id)
                                     ? 'bg-blue-50 text-blue-600'
                                     : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                                     }`}
                             >
-                                <FaRegBookmark className="text-lg" />
+                                <FaBookmark className="text-lg" />
                             </button>
 
                             <button
@@ -394,7 +370,7 @@ const SingleDesignPage = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Image Section */}
                         <div className="lg:col-span-2">
-                            <div className="bg-primary/70 rounded-2xl shadow-sm overflow-hidden">
+                            <div className="bg-primary/50 rounded-2xl shadow-sm overflow-hidden">
                                 {/* Image Display */}
                                 <div className="relative flex items-center justify-center w-full h-[500px]">
                                     {/* flex items-center justify-center */}
@@ -464,14 +440,36 @@ const SingleDesignPage = () => {
                         {/* Info Section */}
                         <div className="space-y-6">
                             {/* Title and Description */}
-                            <div className="bg-white rounded-2xl shadow-sm p-6">
-                                <h1 className="text-2xl font-bold text-gray-900 mb-4">{design.title}</h1>
-                                <p className="text-gray-600 text-md leading-relaxed">{design.description}</p>
+                            <div className="bg-white/50 rounded-2xl shadow-sm p-6">
+                                <h1 className="text-2xl font-bold text-primary-dark mb-4">{design.title}</h1>
+                                <p className="text-primary-light text-md leading-relaxed">{design.description}</p>
+                            </div>
+
+                            {/* Quantity Selector */}
+                            <div className="bg-white/50 rounded-2xl shadow-sm p-6">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-gray-600 font-medium">Quantity</span>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                                            className="w-8 h-8 flex items-center justify-center rounded-full border border-primary-light"
+                                        >
+                                            <FaMinus size={14} />
+                                        </button>
+                                        <span className="w-8 text-center font-medium">{quantity}</span>
+                                        <button
+                                            onClick={() => setQuantity(prev => prev + 1)}
+                                            className="w-8 h-8 flex items-center justify-center rounded-full border border-primary-light"
+                                        >
+                                            <FaPlus size={14} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Download Button */}
                             <button
-                                // onClick={handleAddtocart}
+                                onClick={() => handleAddtocart(design?._id)}
                                 className="w-full bg-primary-dark text-white py-3 rounded-xl font-semibold text-lg hover:bg-primary-dark transition-colors flex items-center justify-center gap-3"
                             >
                                 <FaCartShopping />

@@ -124,7 +124,7 @@ const Design = () => {
                     </thead>
                     <tbody className="divide-y divide-primary-dark">
                         {currentDesigns.map((design, index) => (
-                            <tr key={index} className="bg-primary-light text-primary-dark">
+                            <tr key={index} className="bg-primary-dark/10 text-primary-dark">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                         {/* <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-600 rounded"></div> */}
@@ -138,13 +138,13 @@ const Design = () => {
                                     {design.description}
                                 </td>
                                 <td className="px-4 py-2 text-sm lg:text-base">
-                                    {design.price}
+                                    ₹{design.price}
                                 </td>
                                 <td className="px-4 py-2 text-sm lg:text-base">
-                                    <button className="text-blue-500 border-2 border-primary p-1 rounded-md" onClick={() => handleEdit(design)}>
+                                    <button className="text-blue-500 border-2 border-primary-dark p-1 rounded-md" onClick={() => handleEdit(design)}>
                                         <MdEdit />
                                     </button>
-                                    <button className="text-red-500 border-2 border-primary p-1 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
+                                    <button className="text-red-500 border-2 border-primary-dark p-1 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
                                         <MdDelete />
                                     </button>
                                 </td>

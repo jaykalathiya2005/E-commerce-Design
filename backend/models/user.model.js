@@ -25,7 +25,11 @@ const userSchema = mongoose.Schema({
     },
     dob: {
         type: Date,
-    }
+    },
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "design"
+    }],
 }, {
     timestamps: true,
     versionKey: false

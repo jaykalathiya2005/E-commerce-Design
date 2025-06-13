@@ -141,8 +141,49 @@ export const resetPassword = createAsyncThunk(
     "users/resetPassword",
     async ({ email, oldPassword, newPassword }, { dispatch, rejectWithValue }) => {
         try {
-            const response = await axios.put(`${BASE_URL}/resetPassword`, { email, oldPassword, newPassword });
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.put(`${BASE_URL}/resetPassword`, { email, oldPassword, newPassword }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            return response.data;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const getUserWishList = createAsyncThunk(
+    'user/getwishlist',
+    async (_, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.get(`${BASE_URL}/getwishlist`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const addToWishList = createAsyncThunk(
+    'user/addtowishlist',
+    async (designId, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.put(`${BASE_URL}/wishlist`, { designId }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            dispatch(getUserWishList());
             return response.data;
         } catch (error) {
             return handleErrors(error, dispatch, rejectWithValue);
@@ -263,6 +304,55 @@ const usersSlice = createSlice({
                 state.success = false;
                 state.message = action.payload?.message || 'Failed to reset password';
             })
+            .addCase(addToWishList.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addToWishList.fulfilled, (state, action) => {
+                state.loading = false;
+                state.addtowishlist = action.payload;
+                state.success = true;
+                state.isError = false;
+                state.message = "Product Added To Wishlist";
+            })
+            // .addCase(addToWishList.fulfilled, (state, action) => {
+            //     state.loading = false;
+            //     // state.addtowishlist = action.payload;
+            //     state.success = true;
+            //     state.isError = false;
+            //     state.message = "Product Added To Wishlist";
+            //     console.log(action.payload)
+            //     console.log(action.payload, state.allusers)
+            //     if (state.userWishList.user.wishlist.some(design => design._id === action.payload._id)) {
+            //         state.userWishList.user.wishlist = state.userWishList.user.wishlist.filter(design => design._id !== action.payload._id);
+            //     } else {
+            //         state.userWishList.user.wishlist.push(action.payload);
+            //     }
+
+            // })
+            .addCase(addToWishList.rejected, (state, action) => {
+                state.loading = false;
+                state.isError = true;
+                state.success = false;
+                state.message = action.error;
+            })
+            .addCase(getUserWishList.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getUserWishList.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.isError = false;
+                state.userWishList = action.payload;
+
+            })
+            .addCase(getUserWishList.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.isError = true;
+                state.user = null;
+                state.message = "Rejected";
+
+            });
     }
 });
 

@@ -18,7 +18,7 @@ const Profile = () => {
             </div>
 
             {/* Profile Form */}
-            <div className="bg-primary/50 rounded-lg shadow-sm p-4 md:p-8">
+            <div className="bg-primary/50 rounded-lg shadow-sm">
                 <form className="space-y-4 md:space-y-6">
                     {/* First Name and Last Name */}
                     <div>

@@ -5,6 +5,7 @@ import { getAllUsers } from '../Redux/Slice/user.slice'
 import { FaBars, FaSearch, FaTimes } from 'react-icons/fa'
 import { IconButton } from '@mui/material'
 import { FaCartShopping } from 'react-icons/fa6'
+import { addToCart, getCart } from '../Redux/Slice/design.slice'
 
 const Header = ({ setSearchTerm, handleDrawerToggle }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -20,6 +21,9 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
     useEffect(() => {
         dispatch(getAllUsers())
+        if (token) {
+            dispatch(getCart())
+        }
     }, [])
 
     const handleSearchChange = (e) => {
@@ -31,7 +35,9 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
     };
 
     const handlecart = () => {
-        navigate('/cart')
+        if (userId && token) {
+            navigate('/cart')
+        }
     };
 
     const toggleSearch = () => {
@@ -40,8 +46,11 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
     const location = useLocation()
 
+    const cartItems = useSelector((state) => state?.design.cartitems?.cart)
+
     return (
-        <header className="sticky top-0 z-50 bg-primary h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+        // <header className="sticky top-0 z-50 bg-primary h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+        <header className="bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -57,9 +66,9 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                     onChange={handleSearchChange}
                                     type="text"
                                     placeholder="What are you looking for?"
-                                    className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-white rounded-full focus:outline-none placeholder-white"
+                                    className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-primary rounded-full focus:outline-none placeholder-white"
                                 />
-                                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-1.5 rounded-full">
+                                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary p-1.5 rounded-full">
                                     <FaSearch className="h-4 w-4" />
                                 </button>
                             </div>
@@ -68,8 +77,20 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
                     {/* Right Side - Desktop */}
                     <div className="hidden lg:flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
+                        {/* <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
                             <FaCartShopping className="h-4 w-4" />
+                        </div> */}
+                        <div className="relative">
+                            <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
+                                <FaCartShopping className="h-4 w-4" />
+                            </div>
+                            {cartItems?.length > 0 && (
+                                <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                    <span className="text-white text-sm font-medium">
+                                        {cartItems?.length}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                         {userId && token ? (
                             <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
@@ -101,10 +122,10 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                 onChange={handleSearchChange}
                                 type="text"
                                 placeholder={`${isSearchOpen ? "looking for?" : "What are you looking for?"}`}
-                                className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-white rounded-full focus:outline-none placeholder-white"
+                                className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-primary rounded-full focus:outline-none placeholder-primary"
                                 autoFocus={isSearchOpen}
                             />
-                            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-1.5 rounded-full">
+                            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary p-1.5 rounded-full">
                                 <FaSearch className="h-4 w-4" />
                             </button>
                         </div>
@@ -116,8 +137,8 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         {location?.pathname === '/' && (
                             <IconButton
                                 onClick={toggleSearch}
-                                className="text-white"
-                                sx={{ color: 'white' }}
+                                className="text-black"
+                                sx={{ color: 'black' }}
                             >
                                 {isSearchOpen ? <FaTimes /> : <FaSearch />}
                             </IconButton>
@@ -126,17 +147,30 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         {/* Other icons - hidden when search is open */}
                         <div className={`flex items-center space-x-2 transition-all duration-300 ${isSearchOpen ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
                             {/* Menu Button */}
-                            {location?.pathname !== '/' && (
+                            {location?.pathname !== '/' && location?.pathname !== '/cart' && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
                                     edge="start"
                                     onClick={handleDrawerToggle}
-                                    sx={{ color: 'white' }}
+                                    sx={{ color: 'black' }}
                                 >
                                     <FaBars />
                                 </IconButton>
                             )}
+
+                            <div className="relative">
+                                <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
+                                    <FaCartShopping className="h-4 w-4" />
+                                </div>
+                                {cartItems?.length > 0 && (
+                                    <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                        <span className="text-white text-sm font-medium">
+                                            {cartItems?.length}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
 
                             {/* User Profile/Auth buttons */}
                             {userId && token ? (

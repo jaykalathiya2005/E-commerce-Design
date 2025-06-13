@@ -5,6 +5,7 @@ import { setAlert } from "./alert.slice";
 
 const initialStateDesign = {
     allDesign: [],
+    cartitems: [],
     currDesign: null,
     success: false,
     message: '',
@@ -182,6 +183,100 @@ export const editDesign = createAsyncThunk(
     }
 );
 
+export const likeDesign = createAsyncThunk(
+    'Design/like',
+    async (designId, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.put(`${BASE_URL}/like`, { designId }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            // dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            return response.data.Design;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const addToCart = createAsyncThunk(
+    'design/add-to-cart',
+    async (data, { dispatch, rejectWithValue }) => {
+        console.log(data);
+        try {
+            const token = await sessionStorage.getItem("token");
+            console.log("token", token);
+            const response = await axios.post(`${BASE_URL}/cart`, data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            dispatch(getCart())
+            return response.data;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const getCart = createAsyncThunk(
+    'design/cart',
+    async (_, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.get(`${BASE_URL}/cart`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const removeCart = createAsyncThunk(
+    'design/delete-product-cart',
+    async (id, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.post(`${BASE_URL}/delete-design-cart`, { cartItemId: id }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            dispatch(getCart());
+            return id;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
+export const updateCart = createAsyncThunk(
+    'design/update-product-cart',
+    async (data, { dispatch, rejectWithValue }) => {
+        try {
+            const token = await sessionStorage.getItem("token");
+            const response = await axios.post(`${BASE_URL}/update-design-cart`, { cartItemId: data.cartItemId, newQuantity: data.newQuantity }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            // dispatch(setAlert({ text: response.data.message, color: 'success' }));
+            dispatch(getCart())
+            return response.data;
+        } catch (error) {
+            return handleErrors(error, dispatch, rejectWithValue);
+        }
+    }
+);
+
 const designSlice = createSlice({
     name: 'design',
     initialState: initialStateDesign,
@@ -268,6 +363,93 @@ const designSlice = createSlice({
                 state.loading = false;
                 state.success = false;
                 state.message = action.payload?.message || 'Failed to update design';
+            })
+            // like design
+            .addCase(likeDesign.pending, (state) => {
+                state.loading = true;
+                state.message = 'design like...';
+            })
+            .addCase(likeDesign.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.allDesign = state.allDesign.map((design) =>
+                    design._id === action.payload._id ? action.payload : design
+                );
+                state.message = action.payload?.message || 'design like successfully';
+            })
+            .addCase(likeDesign.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.message = action.payload?.message || 'Failed to like design';
+            })
+            // add to cart
+            .addCase(addToCart.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addToCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.isError = false;
+                state.cartProduct = action.payload;
+            })
+            .addCase(addToCart.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.isError = true;
+                state.allDesign = null;
+                state.message = "Rejected";
+
+            })
+            // get cart
+            .addCase(getCart.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.isError = false;
+                state.cartitems = action.payload;
+            })
+            .addCase(getCart.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.isError = true;
+                state.allDesign = null;
+                state.message = "Rejected";
+            })
+            // delete cart
+            .addCase(removeCart.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(removeCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.isError = false;
+                state.deletedCartProduct = action.payload;
+            })
+            .addCase(removeCart.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.isError = true;
+                state.allDesign = null;
+                state.message = "Rejected";
+            })
+            // update cart
+            .addCase(updateCart.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.isError = false;
+                state.updateCartProduct = action.payload;
+            })
+            .addCase(updateCart.rejected, (state, action) => {
+                state.loading = false;
+                state.success = false;
+                state.isError = true;
+                state.allDesign = null;
+                state.message = "Rejected";
             });
     }
 });
