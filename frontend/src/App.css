@@ -1,3 +1,20 @@
 .j_card:hover .j_card_text {
   opacity: 1;
 }
+
+.sp_css {
+  min-width: calc(100% - 250px);
+}
+
+.j_shadow {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.j_bg_color {
+  background: linear-gradient(to right, #c084fc, #fbcfe8, #818cf8);
+  padding: 4px;
+  height: 100vh;
+  min-height: calc(100vh - 65px);
+  overflow-y: scroll;
+  scrollbar-width: none;
+}

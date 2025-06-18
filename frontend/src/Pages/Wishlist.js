@@ -27,14 +27,14 @@ const Wishlist = () => {
     };
 
     return (
-        <div className="p-4">
+        <>
             {/* Navigation Tabs */}
             <div className="flex justify-center mb-8">
                 <div className="bg-white rounded-xl p-2 shadow-lg">
                     <div className="flex gap-2">
                         <button
                             onClick={() => setActiveTab('wishlist')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'wishlist'
+                            className={`px-3 md:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'wishlist'
                                 ? 'bg-purple-400 text-white shadow-md'
                                 : 'text-gray-600 hover:bg-gray-100'
                                 }`}
@@ -47,7 +47,7 @@ const Wishlist = () => {
                         </button>
                         <button
                             onClick={() => setActiveTab('liked')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'liked'
+                            className={`px-3 md:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'liked'
                                 ? 'bg-pink-400 text-white shadow-md'
                                 : 'text-gray-600 hover:bg-gray-100'
                                 }`}
@@ -216,7 +216,7 @@ const Wishlist = () => {
                     )}
                 </div>
             )}
-        </div>
+        </>
     )
 }
 

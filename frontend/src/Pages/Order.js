@@ -71,20 +71,11 @@ const Order = () => {
                 <h1 className="text-xl md:text-2xl font-semibold text-primary-dark">
                     My Order
                 </h1>
-                <div className="relative">
-                    <select className="w-full sm:w-auto px-3 md:px-4 py-2 border border-gray-300 rounded-full appearance-none bg-white text-gray-700 pr-8 md:pr-10 focus:outline-none focus:ring-2 focus:ring-primary-dark text-sm md:text-base">
-                        <option>Show: Last 05 Order</option>
-                        <option>Show: Last 10 Order</option>
-                        <option>Show: Last 20 Order</option>
-                        <option>Show: All Orders</option>
-                    </select>
-                    <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-3 h-3 md:w-4 md:h-4 text-primary-dark" />
-                </div>
             </div>
 
             {/* Orders Table - Desktop */}
-            <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
-                <table className="w-full">
+            <div className="bg-transparent rounded-lg shadow-sm relative overflow-x-auto scrollbar-hide">
+                <table className="w-full min-w-[900px]">
                     <thead className="bg-primary-dark text-white">
                         <tr>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Image</th>
@@ -123,9 +114,9 @@ const Order = () => {
             </div>
 
             {/* Orders Cards - Mobile */}
-            <div className="md:hidden space-y-4">
+            {/* <div className="md:hidden space-y-4">
                 {currentOrders.map((order, index) => (
-                    <div key={index} className="bg-primary-light rounded-lg shadow-sm p-4 border border-primary-dark">
+                    <div key={index} className="bg-primary-dark/10 rounded-lg shadow-sm p-4 border border-primary-dark">
                         <div className="flex items-start space-x-3">
                             <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <div className="w-12 h-12 bg-blue-600 rounded"></div>
@@ -147,7 +138,7 @@ const Order = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
 
             {/* Pagination */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-6 gap-4">

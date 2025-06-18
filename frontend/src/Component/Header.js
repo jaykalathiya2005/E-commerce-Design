@@ -6,6 +6,7 @@ import { FaBars, FaSearch, FaTimes } from 'react-icons/fa'
 import { IconButton } from '@mui/material'
 import { FaCartShopping } from 'react-icons/fa6'
 import { addToCart, getCart } from '../Redux/Slice/design.slice'
+import { enqueueSnackbar } from 'notistack'
 
 const Header = ({ setSearchTerm, handleDrawerToggle }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -21,7 +22,7 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
     useEffect(() => {
         dispatch(getAllUsers())
-        if (token) {
+        if (token && userId) {
             dispatch(getCart())
         }
     }, [])
@@ -37,6 +38,13 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
     const handlecart = () => {
         if (userId && token) {
             navigate('/cart')
+        } else {
+            enqueueSnackbar('Please login to go cart.', {
+                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                }
+            });
         }
     };
 
@@ -80,8 +88,8 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         {/* <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
                             <FaCartShopping className="h-4 w-4" />
                         </div> */}
-                        <div className="relative">
-                            <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
+                        <div className="relative" onClick={handlecart}>
+                            <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium">
                                 <FaCartShopping className="h-4 w-4" />
                             </div>
                             {cartItems?.length > 0 && (
@@ -93,21 +101,21 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                             )}
                         </div>
                         {userId && token ? (
-                            <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
+                            <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
                                 {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''}
                             </div>
                         ) : (
                             <div className="flex items-center space-x-2">
                                 {/* Sign up button */}
                                 <div onClick={() => navigate('/login', { state: { isSignUp: true } })}>
-                                    <button className="text-gray-700 hover:text-white font-medium px-4 py-2 rounded-full hover:bg-primary-dark transition-all duration-300">
+                                    <button className="text-gray-700 hover:text-white font-medium px-4 py-2 rounded-full hover:bg-primary-dark/60 transition-all duration-300">
                                         Sign up
                                     </button>
                                 </div>
 
                                 {/* Log in button */}
                                 <div onClick={() => navigate('/login')}>
-                                    <button className="bg-primary-dark hover:bg-primary-dark text-white font-medium px-4 py-2 rounded-full transition-colors">
+                                    <button className="bg-primary-dark/60 text-white font-medium px-4 py-2 rounded-full transition-colors">
                                         Log In
                                     </button>
                                 </div>
@@ -122,7 +130,7 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                 onChange={handleSearchChange}
                                 type="text"
                                 placeholder={`${isSearchOpen ? "looking for?" : "What are you looking for?"}`}
-                                className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-primary rounded-full focus:outline-none placeholder-primary"
+                                className="w-full pl-4 pr-10 py-2 bg-primary-dark/50 text-primary rounded-full focus:outline-none placeholder-primary"
                                 autoFocus={isSearchOpen}
                             />
                             <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary p-1.5 rounded-full">
@@ -147,7 +155,7 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         {/* Other icons - hidden when search is open */}
                         <div className={`flex items-center space-x-2 transition-all duration-300 ${isSearchOpen ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
                             {/* Menu Button */}
-                            {location?.pathname !== '/' && location?.pathname !== '/cart' && (
+                            {location?.pathname !== '/' && location?.pathname !== '/cart' && !location?.pathname.startsWith('/design/') && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
@@ -159,8 +167,8 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                 </IconButton>
                             )}
 
-                            <div className="relative">
-                                <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
+                            <div className="relative" onClick={handlecart}>
+                                <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium">
                                     <FaCartShopping className="h-4 w-4" />
                                 </div>
                                 {cartItems?.length > 0 && (
@@ -174,7 +182,7 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
                             {/* User Profile/Auth buttons */}
                             {userId && token ? (
-                                <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
+                                <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
                                     {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''}
                                 </div>
                             ) : (
@@ -188,7 +196,7 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
                                     {/* Log in button */}
                                     <div onClick={() => navigate('/login')}>
-                                        <button className="bg-primary-dark hover:bg-primary-dark text-white font-medium px-2 py-1 rounded-full transition-colors text-sm whitespace-nowrap">
+                                        <button className="bg-primary-dark/60 text-white font-medium px-2 py-1 rounded-full transition-colors text-sm whitespace-nowrap">
                                             Log In
                                         </button>
                                     </div>

@@ -30,18 +30,8 @@ function Layout({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    const userId = sessionStorage.getItem('userId');
     const [openSubmenu, setOpenSubmenu] = useState(null);
-    const user = useSelector((state) => state.user.currUser)
-
-    // Memoize the user data
-    const memoizedUser = useMemo(() => user, [user]);
-
-    useEffect(() => {
-        if (userId) {
-            dispatch(getUserById(userId))
-        }
-    }, [userId])
+    const userId = sessionStorage.getItem('userId')
 
     const handleDrawerClose = () => {
         setIsClosing(true);
@@ -109,22 +99,23 @@ function Layout({ children }) {
                                 }}
                                 sx={{
                                     gap: '4px',
-                                    backgroundColor: (v.path && location.pathname.includes(v.path)) ? '#FFF9F6' : 'transparent',
-                                    color: (v.path && location.pathname.includes(v.path)) ? '#523C34' : 'white',
+                                    backgroundColor: 'transparent',
+                                    boxShadow: (v.path && location.pathname.includes(v.path)) ? '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)' : 'none',
+                                    color: '#000',
                                     borderRadius: '10px',
                                     '&:hover': {
-                                        backgroundColor: '#FFF9F6',
-                                        color: '#523C34',
+                                        backgroundColor: 'transparent',
+                                        color: '#000',
                                         '& .MuiSvgIcon-root': {
-                                            color: '#523C34',
+                                            color: '#000',
                                         },
                                         '& .icon': {
-                                            color: '#523C34',
+                                            color: '#000',
                                         }
                                     }
                                 }}
                             >
-                                <ListItemIcon className="icon" sx={{ color: (v.path && location.pathname.includes(v.path)) ? '#523C34' : 'white', fontSize: '20px', minWidth: '35px' }}>
+                                <ListItemIcon className="icon" sx={{ color: '#000', fontSize: '20px', minWidth: '35px' }}>
                                     {v.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={v.title} sx={{ fontSize: '18px', fontWeight: 500, whiteSpace: 'nowrap' }} />
@@ -136,8 +127,8 @@ function Layout({ children }) {
                             <ListItem key={subItem.title} disablePadding sx={{ paddingLeft: '40px' }}>
                                 <ListItemButton
                                     sx={{
-                                        backgroundColor: location.pathname.includes(subItem.path) ? '#FFF9F6' : 'transparent',
-                                        color: location.pathname.includes(subItem.path) ? '#523C34' : 'white',
+                                        backgroundColor: 'transparent',
+                                        color: 'black',
                                         borderRadius: '10px',
                                         fontSize: '10px',
                                         paddingTop: '5px',
@@ -170,7 +161,7 @@ function Layout({ children }) {
     const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' }} className='j_bg_color'>
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -182,6 +173,7 @@ function Layout({ children }) {
                 <Header handleDrawerToggle={handleDrawerToggle} />
             </AppBar>
             <Box
+                className='j_shadow'
                 component="nav"
                 sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
                 aria-label="mailbox folders"
@@ -200,7 +192,8 @@ function Layout({ children }) {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: drawerWidth,
-                            background: '#523C34',
+                            background: '#fff',
+                            border: 'none',
                             // marginTop: '65px'
                         },
                     }}
@@ -214,8 +207,9 @@ function Layout({ children }) {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: drawerWidth,
-                            background: '#523C34',
-                            marginTop: '65px'
+                            background: 'transparent',
+                            marginTop: '65px',
+                            border: 'none'
                         },
                     }}
                     open
@@ -225,7 +219,8 @@ function Layout({ children }) {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` }, flex: 1, p: 4, md: { p: 6 }, lg: { p: 8 } }}
+                className='sp_css'
+                sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` }, flex: 1, p: 4, px: { xs: 2, md: 4 } }}
             // sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` }, flex: 1, p: 4, md: { p: 6 }, lg: { p: 8 }, background: 'linear-gradient(to right, #6B46C1, #D946EF, #6B46C1)' }}
             >
                 <Toolbar />

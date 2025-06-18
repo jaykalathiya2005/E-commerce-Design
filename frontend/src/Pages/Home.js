@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Component/Header';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
+import { enqueueSnackbar, useSnackbar } from 'notistack';
 import { getAlldesign, likeDesign } from '../Redux/Slice/design.slice';
 import { FaBookmark, FaHeart, FaRegBookmark } from 'react-icons/fa';
 import { IMAGE_URL } from '../Utils/baseUrl';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { addToWishList, getUserWishList } from '../Redux/Slice/user.slice';
 
 const Home = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    const userIdDesign = location.state?.userIdDesign;
 
     const userId = sessionStorage.getItem('userId')
     const token = sessionStorage.getItem('token')
 
-    const alldesign = useSelector((state) => state.design.allDesign);
+    const alldesign = useSelector((state) => userIdDesign ? state.design.allDesign.filter((user) => user?.userId == userIdDesign) : state.design.allDesign);
     const userWishlist = useSelector((state) => state?.user?.userWishList?.user?.wishlist);
 
     useEffect(() => {
@@ -28,12 +30,30 @@ const Home = () => {
 
     // Function to toggle heart state for specific card
     const toggleHeart = (likeId) => {
-        dispatch(likeDesign(likeId));
+        if (token && userId) {
+            dispatch(likeDesign(likeId));
+        } else {
+            enqueueSnackbar('Please login to like this design.', {
+                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                }
+            });
+        }
     };
 
     // Function to toggle bookmark state for specific card
     const toggleBookmark = (wishlistId) => {
-        dispatch(addToWishList(wishlistId));
+        if (token && userId) {
+            dispatch(addToWishList(wishlistId));
+        } else {
+            enqueueSnackbar('Please login to wishlist this design.', {
+                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                }
+            });
+        }
     };
 
     // Function to open single design view

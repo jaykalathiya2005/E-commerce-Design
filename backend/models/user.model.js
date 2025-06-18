@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema({
         type: String,
     },
     dob: {
-        type: Date,
+        type: String,
     },
     wishlist: [{
         type: mongoose.Schema.Types.ObjectId,

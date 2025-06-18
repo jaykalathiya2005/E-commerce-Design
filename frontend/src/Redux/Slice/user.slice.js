@@ -75,8 +75,15 @@ export const updateUser = createAsyncThunk(
         const token = await sessionStorage.getItem("token");
         const formData = new FormData();
 
+        // Object.keys(values).forEach((key) => {
+        //     if (values[key] !== null) {
+        //         formData.append(key, values[key]);
+        //     }
+        // });
+
+        // Append all form values to FormData
         Object.keys(values).forEach((key) => {
-            if (values[key] !== null) {
+            if (values[key] !== null && values[key] !== undefined) {
                 formData.append(key, values[key]);
             }
         });
@@ -252,6 +259,7 @@ const usersSlice = createSlice({
                 state.allusers = state.allusers.map(user =>
                     user._id === action.payload._id ? action.payload : user
                 );
+                state.currUser = action.payload;
                 state.message = action.payload?.message || 'User updated successfully';
             })
             .addCase(updateUser.rejected, (state, action) => {

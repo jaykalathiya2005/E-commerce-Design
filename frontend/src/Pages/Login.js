@@ -329,7 +329,7 @@ const Login = () => {
                         className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-primary"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-primary-dark"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);
@@ -524,7 +524,7 @@ const Login = () => {
                         className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-primary"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-primary-dark"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);

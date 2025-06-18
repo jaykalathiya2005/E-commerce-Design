@@ -1,5 +1,6 @@
 const design = require('../models/Design.models');
 const Cart = require('../models/cart.models');
+const mongoose = require('mongoose');
 
 exports.createDesign = async (req, res) => {
     try {
@@ -45,21 +46,63 @@ exports.getAlldesign = async (req, res) => {
     }
 }
 
+// exports.getdesignById = async (req, res) => {
+//     try {
+//         const designbyId = await design.findById(req.params.id);
+//         if (!designbyId) {
+//             return res.status(404).json({
+//                 status: 404,
+//                 message: "design not found",
+//             });
+//         } else {
+//             return res.status(200).json({
+//                 status: 200,
+//                 message: "design found successfully",
+//                 Design: designbyId,
+//             });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({
+//             status: 500,
+//             message: error.message,
+//         });
+//     }
+// };
+
 exports.getdesignById = async (req, res) => {
     try {
-        const designbyId = await design.findById(req.params.id);
-        if (!designbyId) {
+        const designWithUser = await design.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(req.params.id) }
+            },
+            {
+                $lookup: {
+                    from: "users", // Make sure this matches your actual MongoDB collection name for users
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$userData"
+                }
+            }
+        ]);
+
+        if (!designWithUser || designWithUser.length === 0) {
             return res.status(404).json({
                 status: 404,
                 message: "design not found",
             });
-        } else {
-            return res.status(200).json({
-                status: 200,
-                message: "design found successfully",
-                Design: designbyId,
-            });
         }
+
+        return res.status(200).json({
+            status: 200,
+            message: "design found successfully",
+            Design: designWithUser[0],
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -68,6 +111,7 @@ exports.getdesignById = async (req, res) => {
         });
     }
 };
+
 
 exports.deleteDesign = async (req, res) => {
     try {

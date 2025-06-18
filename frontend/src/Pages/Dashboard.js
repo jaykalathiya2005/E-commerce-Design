@@ -17,7 +17,7 @@ const Dashboard = () => {
             {/* Header */}
             <div className="mb-6 md:mb-8">
                 <h1 className="text-xl md:text-2xl font-semibold text-primary-dark mb-2">
-                    Hello, <span className="text-primary-dark/70">{singleuser?.userName}</span> !
+                    Hello, <span className="text-primary-dark/70 capitalize">{singleuser?.userName}</span> !
                 </h1>
                 <p className="text-sm md:text-base text-gray-600">
                     {/* max-w-3xl */}

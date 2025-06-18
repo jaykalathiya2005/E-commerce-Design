@@ -40,7 +40,7 @@ const Cart = () => {
             <div className="shadow z-10 sticky top-0" style={{ boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)' }}>
                 <Header />
             </div>
-            <div className="bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 p-4 min-h-[calc(100vh-65px)] h-full">
+            <div className="bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 p-4 h-[calc(100vh-65px)] overflow-y-scroll scrollbar-hide">
                 <div className="max-w-6xl mx-auto">
                     <div className="bg-white/50 rounded-lg shadow-sm p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

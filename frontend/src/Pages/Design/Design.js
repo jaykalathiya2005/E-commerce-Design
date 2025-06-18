@@ -96,9 +96,10 @@ const Design = () => {
     }
 
     return (
-        <div>
+        <div >
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+                {/* <div className="flex justify-between items-center mb-6 gap-4"> */}
                 <h1 className="text-xl md:text-2xl font-semibold text-primary-dark">
                     Manage Your Design
                 </h1>
@@ -111,8 +112,10 @@ const Design = () => {
             </div>
 
             {/* Design Table - Desktop */}
-            <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
-                <table className="w-full">
+            {/* <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden"> */}
+            <div className="bg-transparent rounded-lg shadow-sm relative overflow-x-auto scrollbar-hide">
+                {/* <table className="w-full">   */}
+                <table className="w-full min-w-[900px]">
                     <thead className="bg-primary-dark text-white">
                         <tr>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Image</th>
@@ -127,7 +130,6 @@ const Design = () => {
                             <tr key={index} className="bg-primary-dark/10 text-primary-dark">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                        {/* <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-600 rounded"></div> */}
                                         <img src={`${IMAGE_URL}${design?.images?.[0]}`} alt={design.title} className='h-12' />
                                     </div>
                                 </td>
@@ -140,38 +142,20 @@ const Design = () => {
                                 <td className="px-4 py-2 text-sm lg:text-base">
                                     ₹{design.price}
                                 </td>
-                                <td className="px-4 py-2 text-sm lg:text-base">
-                                    <button className="text-blue-500 border-2 border-primary-dark p-1 rounded-md" onClick={() => handleEdit(design)}>
-                                        <MdEdit />
-                                    </button>
-                                    <button className="text-red-500 border-2 border-primary-dark p-1 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
-                                        <MdDelete />
-                                    </button>
+                                <td>
+                                    <div className="text-sm lg:text-base">
+                                        <button className="text-blue-500 bg-primary-dark/70 p-2 rounded-md" onClick={() => handleEdit(design)}>
+                                            <MdEdit />
+                                        </button>
+                                        <button className="text-red-500 bg-primary-dark/70 p-2 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
+                                            <MdDelete />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div>
-
-            {/* design Cards - Mobile */}
-            <div className="md:hidden space-y-4">
-                {currentDesigns.map((design, index) => (
-                    <div key={index} className="bg-primary-light hover:bg-primary-dark/80 rounded-lg shadow-sm p-4 border border-primary-dark">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                {/* <div className="w-12 h-12 bg-blue-600 rounded"></div> */}
-                                <img src={`${IMAGE_URL}${design?.images[0]}`} alt={design.title} className='h-12' />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex flex-col space-y-2">
-                                    <p className="text-sm font-medium hover:text-white text-primary-dark">{design.title}</p>
-                                    <p className="text-xs hover:text-white text-primary">{design.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
             </div>
 
             {/* Pagination */}

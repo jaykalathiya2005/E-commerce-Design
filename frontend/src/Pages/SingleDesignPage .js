@@ -13,23 +13,27 @@ const SingleDesignPage = () => {
     const navigate = useNavigate();
     const { id } = useParams()
     const { enqueueSnackbar } = useSnackbar();
+    const userId = sessionStorage.getItem('userId');
+    const token = sessionStorage.getItem('token');
+    const [photo, setphoto] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
-
-    const SingleDesign = useSelector((state) => state.design.currDesign)
+    const SingleDesign = useSelector((state) => state.design.currDesign);
+    const userDetail = SingleDesign?.userData
+    const usersDesign = useSelector((state) => state.design.allDesign)
+        .filter((user) => user?.userId == SingleDesign?.userId)
+        .filter((item) => item._id !== id);
 
     useEffect(() => {
         dispatch(getdesignById(id))
-    }, [])
+        dispatch(getAlldesign())
+    }, [id])
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [design, setDesign] = useState(null);
     // const design = state;
     const [loading, setLoading] = useState(true);
     // const [loading, setLoading] = useState(false);
-
-    const userId = sessionStorage.getItem('userId');
-    const token = sessionStorage.getItem('token');
 
     useEffect(() => {
         const founddesign = SingleDesign
@@ -41,22 +45,40 @@ const SingleDesignPage = () => {
         }
     }, [SingleDesign]);
 
-    const userWishlist = useSelector((state) => state?.user?.userWishList?.user?.wishlist)
+    const userWishlist = useSelector((state) => state?.user?.userWishList?.user?.wishlist);
 
     useEffect(() => {
         if (token) {
-            dispatch(getUserWishList())
+            dispatch(getUserWishList());
         }
     }, [])
 
     // Function to toggle heart state for specific card
     const toggleHeart = (likeId) => {
-        dispatch(likeDesign(likeId)).then(() => dispatch(getdesignById(id)));
+        if (userId && token) {
+            dispatch(likeDesign(likeId)).then(() => dispatch(getdesignById(id)));
+        } else {
+            enqueueSnackbar('Please login to like this design.', {
+                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                }
+            });
+        }
     };
 
     // Function to toggle bookmark state for specific card
     const toggleBookmark = (wishlistId) => {
-        dispatch(addToWishList(wishlistId));
+        if (token && userId) {
+            dispatch(addToWishList(wishlistId));
+        } else {
+            enqueueSnackbar('Please login to wishlist this design.', {
+                variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                }
+            });
+        }
     };
 
     // Function to navigate images
@@ -95,20 +117,6 @@ const SingleDesignPage = () => {
         }
     };
 
-    // Handle keyboard navigation
-    useEffect(() => {
-        const handleKeyPress = (e) => {
-            if (e.key === 'ArrowLeft') {
-                prevImage();
-            } else if (e.key === 'ArrowRight') {
-                nextImage();
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyPress);
-        return () => document.removeEventListener('keydown', handleKeyPress);
-    }, [design]);
-
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -142,10 +150,27 @@ const SingleDesignPage = () => {
     }
 
     const handleAddtocart = () => {
-        if (userId || token) {
+        if (userId && token) {
             dispatch(addToCart({ designId: design._id, quantity, price: design.price }))
         }
     }
+
+    const getInitials = (name) => {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase())
+            .join('')
+            .slice(0, 2); // Take only first 2 initials
+    };
+
+    const homepage = () => {
+        navigate('/', { state: { userIdDesign: SingleDesign?.userId } });
+    }
+
+    // Function to open single design view
+    const openSingleView = (design) => {
+        navigate(`/design/${design._id}`, { state: design });
+    };
 
     return (
         // <div className="min-h-screen bg-gray-50">
@@ -318,13 +343,12 @@ const SingleDesignPage = () => {
         //         </div>
         //     </div>
         // </div>
-        <div className="">
+        <div>
             <div className="shadow z-10 sticky top-0" style={{ boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)' }}>
                 <Header />
             </div>
 
-            {/* <div className="h-[calc(100vh-125px)] md:h-[calc(100vh-65px)] bg-primary-light/70"> */}
-            <div className="h-[calc(100vh-65px)] bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400">
+            <div className="h-[calc(100vh-65px)] overflow-y-scroll scrollbar-hide bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400">
                 {/* Main Content */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
@@ -339,9 +363,9 @@ const SingleDesignPage = () => {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => toggleHeart(design._id)}
-                                className={`p-2 rounded-full transition-all ${design.likes.includes(userId)
+                                className={`p-2 rounded-full transition-all ${design.likes?.includes(userId)
                                     ? 'bg-red-50 text-red-600'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
+                                    : 'bg-gray-100 text-primary-light hover:bg-red-50 hover:text-red-600'
                                     }`}
                             >
                                 <FaHeart className="text-lg" />
@@ -351,7 +375,7 @@ const SingleDesignPage = () => {
                                 onClick={() => toggleBookmark(design._id)}
                                 className={`p-2 rounded-full transition-all ${userWishlist?.find((d) => d._id === design._id)
                                     ? 'bg-blue-50 text-blue-600'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                                    : 'bg-gray-100 text-primary-light hover:bg-blue-50 hover:text-blue-600'
                                     }`}
                             >
                                 <FaBookmark className="text-lg" />
@@ -359,7 +383,7 @@ const SingleDesignPage = () => {
 
                             <button
                                 onClick={handleShare}
-                                className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                                className="p-2 rounded-full bg-gray-100 text-primary-light hover:bg-gray-200 transition-colors"
                             >
                                 <FaShare className="text-lg" />
                             </button>
@@ -367,7 +391,7 @@ const SingleDesignPage = () => {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {/* Image Section */}
                         <div className="lg:col-span-2">
                             <div className="bg-primary/50 rounded-2xl shadow-sm overflow-hidden">
@@ -516,6 +540,90 @@ const SingleDesignPage = () => {
                                 </div>
                             )}
                         </div>
+                    </div>
+                </div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* Profile Section */}
+                    <div className="text-center">
+                        {/* Profile Image */}
+                        <div className="flex items-center justify-center mb-2">
+                            <div className="flex-1 h-px bg-primary-dark mr-8"></div>
+                            <div className="relative">
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-orange-600 p-1">
+                                    <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                                        {userDetail?.photo ? (
+                                            <img
+                                                src={`${IMAGE_URL}${userDetail?.photo}`}
+                                                alt={userDetail?.userName}
+                                                className="w-full h-full object-cover rounded-full"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-orange-400 flex items-center justify-center">
+                                                <span className="text-primary-dark font-bold text-2xl">
+                                                    {getInitials(userDetail?.userName)}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex-1 h-px bg-primary-dark ml-8"></div>
+                        </div>
+
+                        {/* Name */}
+                        <h1 className="text-3xl font-bold text-gray-900 mb-6 capitalize">
+                            {userDetail?.userName}
+                        </h1>
+                    </div>
+
+                    {/* Portfolio Section */}
+                    <div className="pb-6">
+                        <div className="flex justify-between items-center mb-8">
+                            <h2 className="text-2xl font-bold text-gray-900">
+                                More by <span className='capitalize'>{userDetail?.userName}</span>
+                            </h2>
+                            {usersDesign.length > 0 && (
+                                <button className="text-primary-light hover:text-primary-dark font-medium" onClick={() => { homepage() }}>
+                                    View profile
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Portfolio Grid */}
+                        {usersDesign == 0 ? (
+                            <div className='flex justify-center items-center'>
+                                <div className='text-center'>
+                                    <div className="text-primary-dark font-bold text-[20px]">This user has not uploaded more designs.</div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                                {usersDesign?.sort(() => Math.random() - 0.5).slice(0, 5).map((item, index) => (
+                                    <div
+                                        key={index}
+                                        onClick={() => openSingleView(item)}
+                                        className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                                    >
+                                        <div className="aspect-w-4 aspect-h-3 bg-gray-100 overflow-hidden">
+                                            <img
+                                                src={`${IMAGE_URL}${item.images[0]}`}
+                                                alt={item.title}
+                                                className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                        </div>
+                                        <div className="p-4">
+                                            <h3 className="line-clamp-1 font-semibold text-primary-light text-sm mb-1 group-hover:text-primary-dark transition-colors">
+                                                {item.title}
+                                            </h3>
+                                            <p className="text-primary-light text-xs line-clamp-1">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div >
