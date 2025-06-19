@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthorized) {
-    enqueueSnackbar('Not Authorized.', { variant: 'error' });
+    // enqueueSnackbar('Not Authorized.', { variant: 'error' });
     return <Navigate to="/" replace />;
   }
 

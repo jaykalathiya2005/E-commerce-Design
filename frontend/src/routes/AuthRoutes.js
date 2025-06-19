@@ -8,12 +8,14 @@ import Design from '../Pages/Design/Design'
 import Createdesign from '../Pages/Design/Createdesign'
 import ProtectedRoute from './ProtectedRoute'
 import Wishlist from '../Pages/Wishlist'
+import Sidebar from '../Component/Sidebar'
 
 export default function AuthRoutes() {
     return (
         <div>
             <ProtectedRoute>
-                <Layout>
+                {/* <Layout> */}
+                <Sidebar>
                     <Routes>
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/profile" element={<Profile />} />
@@ -22,7 +24,8 @@ export default function AuthRoutes() {
                         <Route path="/design" element={<Design />} />
                         <Route path="/add-design" element={<Createdesign />} />
                     </Routes>
-                </Layout>
+                </Sidebar>
+                {/* </Layout> */}
             </ProtectedRoute>
         </div>
     )

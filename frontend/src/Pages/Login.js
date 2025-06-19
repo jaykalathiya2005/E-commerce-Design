@@ -264,7 +264,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-8">
-                  <h1 className="text-2xl font-bold mb-6 text-primary-dark">Create Account</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-black">Create Account</h1>
 
                   <div className="w-full space-y-4">
                     <div>
@@ -329,7 +329,7 @@ const Login = () => {
                         className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-primary-dark"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);
@@ -341,7 +341,7 @@ const Login = () => {
                     </div>
                     <button
                       type="submit"
-                      className="w-full bg-primary-dark text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
+                      className="w-full bg-primary-dark/90 text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Sign Up
                     </button>
@@ -500,7 +500,7 @@ const Login = () => {
             >
               {({ values, errors, touched, handleChange, setFieldValue }) => (
                 <Form className="bg-white flex flex-col items-center justify-center px-8 md:px-10 h-full py-6">
-                  <h1 className="text-2xl font-bold mb-6 text-primary-dark">Sign In</h1>
+                  <h1 className="text-2xl font-bold mb-6 text-black">Sign In</h1>
                   <div className="w-full space-y-4">
                     <div>
                       <Field
@@ -524,7 +524,7 @@ const Login = () => {
                         className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-primary-dark"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showPassword', !values.showPassword);
@@ -536,12 +536,12 @@ const Login = () => {
                     </div>
 
                     <div className="flex justify-end">
-                      <a onClick={handleForgotPassword} className="text-sm text-primary hover:text-primary cursor-pointer font-medium">Forgot password?</a>
+                      <a onClick={handleForgotPassword} className="text-sm text-primary-dark/90 hover:text-primary-dark cursor-pointer font-medium">Forgot password?</a>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full bg-primary-dark text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
+                      className="w-full bg-primary-dark/90 text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Sign In
                     </button>
@@ -640,7 +640,7 @@ const Login = () => {
         <div className={`absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-500 ease-in-out z-50
           ${isMobile ? 'hidden' : `${isRightPanelActive ? '-translate-x-full' : ''}`}`}>
           <div
-            className={`text-white relative -left-full h-full w-[200%] transform bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-400
+            className={`text-white relative -left-full h-full w-[200%] transform bg-primary-dark
             ${isRightPanelActive ? 'translate-x-1/2' : 'translate-x-0'} transition-transform duration-500 ease-in-out`}
           // style={{
           //   background: '#547792',
@@ -686,7 +686,7 @@ const Login = () => {
 
         {/* Mobile Toggle */}
         {isMobile && (
-          <div className="absolute -bottom-3 left-0 right-0 p-4 bg-black text-white text-center">
+          <div className="absolute -bottom-3 left-0 right-0 p-4 bg-primary-dark text-white text-center">
             <p className="mb-3">
               {isRightPanelActive
                 ? "Already have an account?"

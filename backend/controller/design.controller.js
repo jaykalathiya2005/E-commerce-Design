@@ -240,24 +240,67 @@ exports.likeDesign = async (req, res) => {
     }
 };
 
+// exports.addToCart = async (req, res) => {
+//     const { designId, quantity, price } = req.body;
+//     const { _id } = req.user;
+//     try {
+//         let newCart = await new Cart({
+//             userId: _id,
+//             designId,
+//             quantity,
+//             price
+//         }).save();
+//         res.status(200).json({
+//             status: 200,
+//             success: true,
+//             message: "Item added to cart",
+//             newCart
+//         });
+//     } catch (error) {
+//         throw new Error(error);
+//     }
+// };
+
 exports.addToCart = async (req, res) => {
     const { designId, quantity, price } = req.body;
     const { _id } = req.user;
     try {
-        let newCart = await new Cart({
-            userId: _id,
-            designId,
-            quantity,
-            price
-        }).save();
-        res.status(200).json({
-            status: 200,
-            success: true,
-            message: "Item added to cart",
-            newCart
-        });
+        // Check if the cart item already exists for this user and design
+        let existingCart = await Cart.findOne({ userId: _id, designId });
+
+        if (existingCart) {
+            // If exists, update the quantity
+            existingCart.quantity += quantity;
+            await existingCart.save();
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                // message: "Cart updated with new quantity",
+                message: "Item added to cart",
+                cart: existingCart
+            });
+        } else {
+            // If not, create a new cart item
+            let newCart = await new Cart({
+                userId: _id,
+                designId,
+                quantity,
+                price
+            }).save();
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "Item added to cart",
+                cart: newCart
+            });
+        }
     } catch (error) {
-        throw new Error(error);
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: "Error adding to cart",
+            error: error.message
+        });
     }
 };
 

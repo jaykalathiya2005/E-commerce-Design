@@ -76,7 +76,7 @@ const Order = () => {
             {/* Orders Table - Desktop */}
             <div className="bg-transparent rounded-lg shadow-sm relative overflow-x-auto scrollbar-hide">
                 <table className="w-full min-w-[900px]">
-                    <thead className="bg-primary-dark text-white">
+                    <thead className="bg-primary-dark/60 text-black">
                         <tr>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Image</th>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Order ID</th>
@@ -87,7 +87,7 @@ const Order = () => {
                     </thead>
                     <tbody className="divide-y divide-primary-dark">
                         {currentOrders.map((order, index) => (
-                            <tr key={index} className="bg-primary-dark/10 text-primary-dark">
+                            <tr key={index} className="bg-primary-dark/10 text-black">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                         <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-600 rounded"></div>
@@ -160,8 +160,8 @@ const Order = () => {
                             key={index + 1}
                             onClick={() => paginateorder(index + 1)}
                             className={`px-3 py-2 rounded-lg text-sm ${currentPage === index + 1
-                                ? 'bg-primary-dark text-white border border-primary-dark'
-                                : 'border border-primary-dark hover:bg-primary-dark/50 text-primary-dark hover:text-white transition-all duration-300'
+                                ? 'bg-primary-dark/60 text-white border border-primary-dark'
+                                : 'border border-primary-dark/60 hover:bg-primary-dark/70 text-primary-dark hover:text-white transition-all duration-300'
                                 }`}
                         >
                             {index + 1}
@@ -174,8 +174,8 @@ const Order = () => {
                             <button
                                 onClick={() => paginateorder(totalOrdersPages)}
                                 className={`px-3 py-2 rounded-lg text-sm ${currentPage === totalOrdersPages
-                                    ? 'bg-primary-dark text-white border border-primary-dark'
-                                    : 'border border-primary-dark hover:bg-primary-dark/50 text-primary-dark hover:text-white transition-all duration-300'
+                                    ? 'bg-primary-dark/60 text-white border border-primary-dark'
+                                    : 'border border-primary-dark/60 hover:bg-primary-dark/70 text-primary-dark hover:text-white transition-all duration-300'
                                     }`}
                             >
                                 {totalOrdersPages}

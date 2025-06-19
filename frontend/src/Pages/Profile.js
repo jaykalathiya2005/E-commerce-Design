@@ -21,7 +21,6 @@ const Profile = () => {
         dispatch(getUserById(userId))
     }, [userId])
 
-    // Set initial form values when singleUser data is available
     useEffect(() => {
         if (singleUser) {
             setValues({
@@ -102,14 +101,14 @@ const Profile = () => {
                 <h1 className="text-xl md:text-2xl font-semibold text-primary-dark mb-2">
                     Edit Your Profile
                 </h1>
-                <p className="text-sm md:text-base text-gray-600 ">
+                <p className="text-sm md:text-base font-medium text-black">
                     {/* max-w-4xl */}
                     From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
                 </p>
             </div>
 
             {/* Profile Form */}
-            <div className="bg-transparent rounded-lg shadow-xl p-4">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg shadow-xl p-4">
                 <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 
                     {/* Upload Image */}
@@ -126,7 +125,7 @@ const Profile = () => {
                                         <button
                                             type="button"
                                             onClick={() => handleRemoveImage()}
-                                            className="absolute h-6 w-6 top-1 right-0 bg-primary-dark/50 hover:bg-primary-dark/60 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full opacity-0 group-hover:opacity-100 p-1 transition-opacity flex items-center justify-center"
+                                            className="absolute h-6 w-6 top-1 right-0 bg-black/50 hover:bg-black/60 bg-opacity-70 hover:bg-opacity-90 text-primary rounded-full opacity-0 group-hover:opacity-100 p-1 transition-opacity flex items-center justify-center"
                                         >
                                             <FaTimes size={14} />
                                         </button>
@@ -141,14 +140,14 @@ const Profile = () => {
                                         <button
                                             type="button"
                                             onClick={() => handleRemoveImage()}
-                                            className="absolute h-6 w-6 top-1 right-0 bg-primary-dark/50 hover:bg-primary-dark/60 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full opacity-0 group-hover:opacity-100 p-1 transition-opacity flex items-center justify-center"
+                                            className="absolute h-6 w-6 top-1 right-0 bg-black/50 hover:bg-black/60 bg-opacity-70 hover:bg-opacity-90 text-primary rounded-full opacity-0 group-hover:opacity-100 p-1 transition-opacity flex items-center justify-center"
                                         >
                                             <FaTimes size={14} />
                                         </button>
                                     </>
                                 ) : (
-                                    <div className="text-primary-dark text-lg font-bold flex w-24 h-24 justify-center items-center">
-                                        <span className="text-primary-dark font-bold text-3xl">
+                                    <div className="text-black text-lg font-bold flex w-24 h-24 justify-center items-center">
+                                        <span className="text-black font-bold text-3xl">
                                             {getInitials(singleUser?.userName)}
                                         </span>
                                     </div>
@@ -163,7 +162,7 @@ const Profile = () => {
                                 />
                                 <div
                                     onClick={() => document.getElementById("profileImageInput").click()}
-                                    className="cursor-pointer absolute bottom-0 right-0 z-50 dark:text-white text-white flex items-center justify-center bg-primary-dark/50 hover:bg-primary-dark/60 w-8 h-8 rounded-full transition-opacity duration-300"
+                                    className="cursor-pointer absolute bottom-0 right-0 z-50 dark:text-white text-white flex items-center justify-center bg-black/50 hover:bg-black/60 w-8 h-8 rounded-full transition-opacity duration-300"
                                 >
                                     <svg
                                         width="17"
@@ -227,7 +226,7 @@ const Profile = () => {
                                 placeholder="Enter Your Full Name"
                                 value={values?.userName}
                                 onChange={handleChange}
-                                className="w-full px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                             {errors.userName && touched.userName && (
                                 <div className="mt-2 text-red-600 text-sm">
@@ -243,7 +242,7 @@ const Profile = () => {
                                 placeholder="Enter Your Email Address"
                                 value={values?.email}
                                 disabled
-                                className="w-full px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                         </div>
                     </div>
@@ -258,7 +257,7 @@ const Profile = () => {
                                 placeholder="Enter Your Contact Number"
                                 value={values?.phone}
                                 onChange={handleChange}
-                                className="w-full px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                             {errors.phone && touched.phone && (
                                 <div className="mt-2 text-red-600 text-sm">
@@ -274,7 +273,7 @@ const Profile = () => {
                                 placeholder="Date of Birth"
                                 value={values?.dob}
                                 onChange={handleChange}
-                                className="w-full px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-white placeholder:text-white rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base [&::-webkit-calendar-picker-indicator]:filter"
                             />
                             {errors.dob && touched.dob && (
                                 <div className="mt-2 text-red-600 text-sm">
@@ -321,13 +320,13 @@ const Profile = () => {
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4">
                         <button
                             type="button"
-                            className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark/50 text-white rounded-full hover:bg-primary-dark/60 transition-colors font-medium text-sm md:text-base"
+                            className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark/50 text-black rounded-full hover:bg-primary-dark/60 transition-colors font-medium text-sm md:text-base"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark/50 text-white rounded-full hover:bg-primary-dark/60 transition-colors font-medium text-sm md:text-base"
+                            className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark/50 text-black rounded-full hover:bg-primary-dark/60 transition-colors font-medium text-sm md:text-base"
                         >
                             Update
                         </button>

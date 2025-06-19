@@ -16,7 +16,7 @@ function Alert(props) {
             enqueueSnackbar(alert.text, {
                 variant: alert.color,
                 anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right'
                 },
                 autoHideDuration: 1500

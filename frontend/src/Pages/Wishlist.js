@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaChevronDown, FaFilter, FaHeart, FaShoppingCart, FaStar } from 'react-icons/fa';
+import { FaBookmark, FaChevronDown, FaFilter, FaHeart, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserWishList } from '../Redux/Slice/user.slice';
 import { IMAGE_URL } from '../Utils/baseUrl';
@@ -30,31 +30,31 @@ const Wishlist = () => {
         <>
             {/* Navigation Tabs */}
             <div className="flex justify-center mb-8">
-                <div className="bg-white rounded-xl p-2 shadow-lg">
+                <div className="bg-primary-light/50 rounded-xl p-2 shadow-lg">
                     <div className="flex gap-2">
                         <button
                             onClick={() => setActiveTab('wishlist')}
                             className={`px-3 md:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'wishlist'
-                                ? 'bg-purple-400 text-white shadow-md'
-                                : 'text-gray-600 hover:bg-gray-100'
+                                ? 'bg-primary-dark/50 text-black shadow-md'
+                                : 'text-black hover:bg-primary-dark/40'
                                 }`}
                         >
-                            <FaShoppingCart className="w-4 h-4" />
+                            <FaBookmark className="w-4 h-4" />
                             <span>Wishlist</span>
-                            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full ml-1">
+                            <span className="bg-primary-dark text-white text-xs px-2 py-1 rounded-full ml-1">
                                 {wishlist?.length}
                             </span>
                         </button>
                         <button
                             onClick={() => setActiveTab('liked')}
                             className={`px-3 md:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'liked'
-                                ? 'bg-pink-400 text-white shadow-md'
-                                : 'text-gray-600 hover:bg-gray-100'
+                                ? 'bg-primary-dark/50 text-black shadow-md'
+                                : 'text-black hover:bg-primary-dark/40'
                                 }`}
                         >
                             <FaHeart className="w-4 h-4" />
                             <span>Liked</span>
-                            <span className="bg-pink-600 text-white text-xs px-2 py-1 rounded-full ml-1">
+                            <span className="bg-primary-dark text-white text-xs px-2 py-1 rounded-full ml-1">
                                 {likedData?.length}
                             </span>
                         </button>
@@ -69,13 +69,13 @@ const Wishlist = () => {
                     <h2 className="text-2xl font-bold text-gray-800">My Wishlist</h2>
                     {wishlist?.length === 0 ? (
                         <div className="text-center py-12">
-                            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                <FaShoppingCart className="w-12 h-12 text-primary-light" />
+                            <div className="w-24 h-24 mx-auto mb-4 bg-primary-dark/80 rounded-full flex items-center justify-center">
+                                <FaBookmark className="w-12 h-12 text-primary-light/80" />
                             </div>
-                            <h3 className="text-xl font-bold text-primary-light mb-2">
+                            <h3 className="text-xl font-bold text-black mb-2">
                                 No wishlist designs found
                             </h3>
-                            <p className="text-primary-light">
+                            <p className="text-black font-medium">
                                 Start adding designs you love!
                             </p>
                         </div>
@@ -146,13 +146,13 @@ const Wishlist = () => {
                     <h2 className="text-2xl font-bold text-gray-800">Liked Designs</h2>
                     {likedData?.length === 0 ? (
                         <div className="text-center py-12">
-                            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                <FaHeart className="w-12 h-12 text-primary-light" />
+                            <div className="w-24 h-24 mx-auto mb-4 bg-primary-dark/80 rounded-full flex items-center justify-center">
+                                <FaHeart className="w-12 h-12 text-primary-light/80" />
                             </div>
-                            <h3 className="text-xl font-bold text-primary-light mb-2">
+                            <h3 className="text-xl font-bold text-black mb-2">
                                 No liked designs yet
                             </h3>
-                            <p className="text-primary-light">
+                            <p className="text-black font-medium">
                                 Heart the designs you love to see them here!
                             </p>
                         </div>

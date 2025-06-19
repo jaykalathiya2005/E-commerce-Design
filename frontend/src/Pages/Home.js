@@ -73,8 +73,8 @@ const Home = () => {
             </div>
             {/* {showProfile ? <Profile setShowProfile={setShowProfile} /> : <Cards searchTerm={searchTerm} />} */}
             {/* <Cards searchTerm={searchTerm} /> */}
-            {/* <div className="p-8 overflow-y-scroll bg-primary-light/70 h-[calc(100vh-65px)] scrollbar-hide"> */}
-            <div className="p-8 overflow-y-scroll bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[calc(100vh-65px)] scrollbar-hide">
+            <div className="p-8 overflow-y-scroll bg-primary-light/70 h-[calc(100vh-65px)] scrollbar-hide">
+                {/* <div className="p-8 overflow-y-scroll bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[calc(100vh-65px)] scrollbar-hide"> */}
                 {filteredCards?.length === 0 ? (
                     <div className='flex justify-center items-center min-h-[400px]'>
                         <div className='text-center'>

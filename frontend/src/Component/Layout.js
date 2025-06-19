@@ -166,8 +166,9 @@ function Layout({ children }) {
             <AppBar
                 position="fixed"
                 sx={{
-                    backgroundColor: 'white',
-                    color: '#523C34'
+                    backgroundColor: '#bac095',
+                    color: '#523C34',
+                    // zIndex: 9999
                 }}
             >
                 <Header handleDrawerToggle={handleDrawerToggle} />
@@ -192,9 +193,10 @@ function Layout({ children }) {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: drawerWidth,
-                            background: '#fff',
-                            border: 'none',
+                            background: '#bac095',
+                            // background: 'transparent',
                             // marginTop: '65px'
+                            border: 'none',
                         },
                     }}
                 >
@@ -207,9 +209,10 @@ function Layout({ children }) {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: drawerWidth,
-                            background: 'transparent',
+                            background: '#bac095b3',
+                            // background: 'transparent',
+                            border: 'none',
                             marginTop: '65px',
-                            border: 'none'
                         },
                     }}
                     open
@@ -227,7 +230,7 @@ function Layout({ children }) {
                 {children}
             </Box>
 
-        </Box>
+        </Box >
     );
 }
 

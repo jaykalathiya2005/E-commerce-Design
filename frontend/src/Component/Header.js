@@ -7,8 +7,9 @@ import { IconButton } from '@mui/material'
 import { FaCartShopping } from 'react-icons/fa6'
 import { addToCart, getCart } from '../Redux/Slice/design.slice'
 import { enqueueSnackbar } from 'notistack'
+import { IMAGE_URL } from '../Utils/baseUrl'
 
-const Header = ({ setSearchTerm, handleDrawerToggle }) => {
+const Header = ({ setSearchTerm, setSidebarOpen }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const token = sessionStorage.getItem('token')
     const userId = sessionStorage.getItem('userId')
@@ -56,9 +57,17 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
 
     const cartItems = useSelector((state) => state?.design.cartitems?.cart)
 
+    const getInitials = (name) => {
+        return name
+            ?.split(' ')
+            ?.map(word => word.charAt(0).toUpperCase())
+            ?.join('')
+            ?.slice(0, 2); // Take only first 2 initials
+    };
+
     return (
-        // <header className="sticky top-0 z-50 bg-primary h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
-        <header className="bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+        <header className="bg-primary-light/50 h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+            {/* <header className="bg-gradient-to-r from-purple-400 via-pink-200 to-indigo-400 h-[65px]" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}> */}
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -74,9 +83,9 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                     onChange={handleSearchChange}
                                     type="text"
                                     placeholder="What are you looking for?"
-                                    className="w-full pl-4 pr-10 py-2 bg-[#000]/50 text-primary rounded-full focus:outline-none placeholder-white"
+                                    className="w-full pl-4 pr-10 py-2 bg-black/50 text-black rounded-full focus:outline-none font-medium placeholder-black"
                                 />
-                                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary p-1.5 rounded-full">
+                                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black p-1.5 rounded-full">
                                     <FaSearch className="h-4 w-4" />
                                 </button>
                             </div>
@@ -88,34 +97,50 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         {/* <div className="w-8 h-8 bg-primary-dark cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handlecart}>
                             <FaCartShopping className="h-4 w-4" />
                         </div> */}
-                        <div className="relative" onClick={handlecart}>
-                            <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium">
-                                <FaCartShopping className="h-4 w-4" />
-                            </div>
-                            {cartItems?.length > 0 && (
-                                <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
-                                    <span className="text-white text-sm font-medium">
-                                        {cartItems?.length}
-                                    </span>
+                        {token && userId && (
+                            <div className="relative cursor-pointer" onClick={handlecart}>
+                                <div className="w-8 h-8 bg-primary-dark/60 rounded-full flex items-center justify-center text-black font-medium">
+                                    <FaCartShopping className="h-4 w-4" />
                                 </div>
-                            )}
-                        </div>
+                                {cartItems?.length > 0 && (
+                                    <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                        <span className="text-white text-sm font-medium">
+                                            {cartItems?.length}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {userId && token ? (
-                            <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
-                                {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''}
+                            <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-black font-medium" onClick={handleprofileshow}>
+                                {/* {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''} */}
+                                {singleuser?.photo && singleuser?.photo !== "null" ? (
+                                    <img
+                                        src={`${IMAGE_URL}${singleuser?.photo}`}
+                                        alt={singleuser?.userName}
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
+                                ) : (
+                                    <div className="w-8 h-8 cursor-pointer rounded-full flex items-center justify-center text-black font-medium">
+                                        <span className="font-semibold text-base">
+                                            {getInitials(singleuser?.userName)}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="flex items-center space-x-2">
                                 {/* Sign up button */}
                                 <div onClick={() => navigate('/login', { state: { isSignUp: true } })}>
-                                    <button className="text-gray-700 hover:text-white font-medium px-4 py-2 rounded-full hover:bg-primary-dark/60 transition-all duration-300">
+                                    <button className="text-black font-medium px-4 py-2 rounded-full hover:bg-primary-dark/60 transition-all duration-300">
                                         Sign up
                                     </button>
                                 </div>
 
                                 {/* Log in button */}
                                 <div onClick={() => navigate('/login')}>
-                                    <button className="bg-primary-dark/60 text-white font-medium px-4 py-2 rounded-full transition-colors">
+                                    <button className="bg-primary-dark/60 text-black font-medium px-4 py-2 rounded-full transition-colors">
                                         Log In
                                     </button>
                                 </div>
@@ -130,10 +155,10 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                                 onChange={handleSearchChange}
                                 type="text"
                                 placeholder={`${isSearchOpen ? "looking for?" : "What are you looking for?"}`}
-                                className="w-full pl-4 pr-10 py-2 bg-primary-dark/50 text-primary rounded-full focus:outline-none placeholder-primary"
+                                className="w-full pl-4 pr-10 py-2 bg-primary-dark/50 text-black rounded-full focus:outline-none font-medium placeholder-black"
                                 autoFocus={isSearchOpen}
                             />
-                            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary p-1.5 rounded-full">
+                            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black p-1.5 rounded-full">
                                 <FaSearch className="h-4 w-4" />
                             </button>
                         </div>
@@ -156,47 +181,64 @@ const Header = ({ setSearchTerm, handleDrawerToggle }) => {
                         <div className={`flex items-center space-x-2 transition-all duration-300 ${isSearchOpen ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
                             {/* Menu Button */}
                             {location?.pathname !== '/' && location?.pathname !== '/cart' && !location?.pathname.startsWith('/design/') && (
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    edge="start"
-                                    onClick={handleDrawerToggle}
-                                    sx={{ color: 'black' }}
-                                >
-                                    <FaBars />
-                                </IconButton>
+                                // <IconButton
+                                //     color="inherit"
+                                //     aria-label="open drawer"
+                                //     edge="start"
+                                //     onClick={() => { setSidebarOpen(true) }}
+                                //     sx={{ color: 'white' }}
+                                // >
+                                <div onClick={() => { setSidebarOpen(true) }} className="w-8 h-8 bg-primary-dark/60 rounded-full flex items-center justify-center text-black font-medium">
+                                    <FaBars className="w-4 h-4" />
+                                </div>
+                                // </IconButton>
                             )}
 
-                            <div className="relative" onClick={handlecart}>
-                                <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium">
-                                    <FaCartShopping className="h-4 w-4" />
-                                </div>
-                                {cartItems?.length > 0 && (
-                                    <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
-                                        <span className="text-white text-sm font-medium">
-                                            {cartItems?.length}
-                                        </span>
+                            {token && userId && (
+                                <div className="relative cursor-pointer" onClick={handlecart}>
+                                    <div className="w-8 h-8 bg-primary-dark/60 rounded-full flex items-center justify-center text-black font-medium">
+                                        <FaCartShopping className="h-4 w-4" />
                                     </div>
-                                )}
-                            </div>
+                                    {cartItems?.length > 0 && (
+                                        <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                            <span className="text-white text-sm font-medium">
+                                                {cartItems?.length}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
                             {/* User Profile/Auth buttons */}
                             {userId && token ? (
-                                <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-white font-medium" onClick={handleprofileshow}>
-                                    {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''}
+                                <div className="w-8 h-8 bg-primary-dark/60 cursor-pointer rounded-full flex items-center justify-center text-black font-medium" onClick={handleprofileshow}>
+                                    {/* {singleuser?.userName?.charAt(0).toUpperCase()}{singleuser?.userName?.split(' ')[1] ? singleuser?.userName?.split(' ')[1]?.charAt(0).toUpperCase() : ''} */}
+                                    {singleuser?.photo && singleuser?.photo !== "null" ? (
+                                        <img
+                                            src={`${IMAGE_URL}${singleuser?.photo}`}
+                                            alt={singleuser?.userName}
+                                            className="w-full h-full object-cover rounded-full"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 cursor-pointer rounded-full flex items-center justify-center text-black font-medium">
+                                            <span className="font-semibold text-base">
+                                                {getInitials(singleuser?.userName)}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="flex items-center space-x-2">
                                     {/* Sign up button */}
                                     <div onClick={() => navigate('/login', { state: { isSignUp: true } })}>
-                                        <button className="text-gray-700 hover:text-white font-medium px-2 py-1 rounded-full hover:bg-primary-dark transition-colors text-sm whitespace-nowrap">
+                                        <button className="text-black font-medium px-2 py-1 rounded-full hover:bg-primary-dark transition-colors text-sm whitespace-nowrap">
                                             Sign up
                                         </button>
                                     </div>
 
                                     {/* Log in button */}
                                     <div onClick={() => navigate('/login')}>
-                                        <button className="bg-primary-dark/60 text-white font-medium px-2 py-1 rounded-full transition-colors text-sm whitespace-nowrap">
+                                        <button className="bg-primary-dark/60 text-black font-medium px-2 py-1 rounded-full transition-colors text-sm whitespace-nowrap">
                                             Log In
                                         </button>
                                     </div>

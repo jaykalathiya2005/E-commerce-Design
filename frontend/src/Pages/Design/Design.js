@@ -96,7 +96,7 @@ const Design = () => {
     }
 
     return (
-        <div >
+        <div>
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
                 {/* <div className="flex justify-between items-center mb-6 gap-4"> */}
@@ -105,7 +105,7 @@ const Design = () => {
                 </h1>
                 <button
                     onClick={handleAddDesign}
-                    className="px-4 py-2 bg-primary-dark text-white rounded-lg hover:bg-primary-dark/90 transition-all duration-300 font-medium"
+                    className="px-4 py-2 bg-primary-dark/60 text-black rounded-lg hover:bg-primary-dark/70 transition-all duration-300 font-medium"
                 >
                     Add Design
                 </button>
@@ -116,7 +116,7 @@ const Design = () => {
             <div className="bg-transparent rounded-lg shadow-sm relative overflow-x-auto scrollbar-hide">
                 {/* <table className="w-full">   */}
                 <table className="w-full min-w-[900px]">
-                    <thead className="bg-primary-dark text-white">
+                    <thead className="bg-primary-dark/60 text-black">
                         <tr>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Image</th>
                             <th className="px-4 py-2 text-left font-medium text-sm lg:text-base">Title</th>
@@ -127,7 +127,7 @@ const Design = () => {
                     </thead>
                     <tbody className="divide-y divide-primary-dark">
                         {currentDesigns.map((design, index) => (
-                            <tr key={index} className="bg-primary-dark/10 text-primary-dark">
+                            <tr key={index} className="bg-primary-dark/10 text-black">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                         <img src={`${IMAGE_URL}${design?.images?.[0]}`} alt={design.title} className='h-12' />
@@ -144,10 +144,10 @@ const Design = () => {
                                 </td>
                                 <td>
                                     <div className="text-sm lg:text-base">
-                                        <button className="text-blue-500 bg-primary-dark/70 p-2 rounded-md" onClick={() => handleEdit(design)}>
+                                        <button className="text-black bg-primary-dark/50 p-2 rounded-md" onClick={() => handleEdit(design)}>
                                             <MdEdit />
                                         </button>
-                                        <button className="text-red-500 bg-primary-dark/70 p-2 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
+                                        <button className="text-red-500 bg-primary-dark/50 p-2 rounded-md ml-2" onClick={() => { handleShowDelete(design._id) }}>
                                             <MdDelete />
                                         </button>
                                     </div>
@@ -178,8 +178,8 @@ const Design = () => {
                             key={index + 1}
                             onClick={() => paginateDesign(index + 1)}
                             className={`px-3 py-2 rounded-lg text-sm ${currentPageDesign === index + 1
-                                ? 'bg-primary-dark text-white border border-primary-dark'
-                                : 'border border-primary-dark hover:bg-primary-dark/50 text-primary-dark hover:text-white transition-all duration-300'
+                                ? 'bg-primary-dark/60 text-white border border-primary-dark'
+                                : 'border border-primary-dark/60 hover:bg-primary-dark/70 text-primary-dark hover:text-white transition-all duration-300'
                                 }`}
                         >
                             {index + 1}
@@ -192,8 +192,8 @@ const Design = () => {
                             <button
                                 onClick={() => paginateDesign(totalDesignPages)}
                                 className={`px-3 py-2 rounded-lg text-sm ${currentPageDesign === totalDesignPages
-                                    ? 'bg-primary-dark text-white border border-primary-dark'
-                                    : 'border border-primary-dark hover:bg-primary-dark/50 text-primary-dark hover:text-white transition-all duration-300'
+                                    ? 'bg-primary-dark/60 text-white border border-primary-dark'
+                                    : 'border border-primary-dark/60 hover:bg-primary-dark/70 text-primary-dark hover:text-white transition-all duration-300'
                                     }`}
                             >
                                 {totalDesignPages}
