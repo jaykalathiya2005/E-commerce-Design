@@ -409,20 +409,20 @@ const SingleDesignPage = () => {
 
                                             {/* Navigation Arrows */}
                                             {design.images.length > 1 && (
-                                                <>
+                                                <div className='hidden xl:block'>
                                                     <button
                                                         onClick={prevImage}
-                                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
+                                                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
                                                     >
                                                         <FaChevronLeft className="text-gray-700" />
                                                     </button>
                                                     <button
                                                         onClick={nextImage}
-                                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
+                                                        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
                                                     >
                                                         <FaChevronRight className="text-gray-700" />
                                                     </button>
-                                                </>
+                                                </div>
                                             )}
 
                                             {/* Image Counter */}
@@ -573,7 +573,7 @@ const SingleDesignPage = () => {
                         </div>
 
                         {/* Name */}
-                        <h1 className="text-3xl font-bold text-black mb-6 capitalize">
+                        <h1 className="text-lg md:text-3xl font-bold text-black mb-6 capitalize">
                             {userDetail?.userName}
                         </h1>
                     </div>
@@ -581,11 +581,11 @@ const SingleDesignPage = () => {
                     {/* Portfolio Section */}
                     <div className="pb-6">
                         <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-2xl font-bold text-black">
+                            <h2 className="text-lg md:text-2xl font-bold text-black">
                                 More by <span className='capitalize'>{userDetail?.userName}</span>
                             </h2>
                             {usersDesign.length > 0 && (
-                                <button className="text-primary-dark/70 hover:text-primary-dark font-medium" onClick={() => { homepage() }}>
+                                <button className="text-primary-dark/70 hover:text-primary-dark font-medium text-sm md:text-lg" onClick={() => { homepage() }}>
                                     View profile
                                 </button>
                             )}
@@ -614,7 +614,7 @@ const SingleDesignPage = () => {
                                             />
                                         </div>
                                         <div className="p-4">
-                                            <h3 className="line-clamp-1 font-semibold text-primary-dark/70 text-sm mb-1 group-hover:text-primary-dark transition-colors">
+                                            <h3 className="line-clamp-1 font-semibold text-black text-sm mb-1 transition-colors">
                                                 {item.title}
                                             </h3>
                                             <p className="text-black text-xs line-clamp-1">

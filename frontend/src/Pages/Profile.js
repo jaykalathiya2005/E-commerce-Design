@@ -71,6 +71,7 @@ const Profile = () => {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
+            setImageRemoved(false);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewUrl(reader.result);
@@ -88,9 +89,12 @@ const Profile = () => {
             ?.slice(0, 2); // Take only first 2 initials
     };
 
+    const [imageRemoved, setImageRemoved] = useState(false);
+
     const handleRemoveImage = () => {
         setSelectedFile(null);
         setPreviewUrl(null);
+        setImageRemoved(true);
         setFieldValue('photo', 'null');
     };
 
@@ -114,7 +118,7 @@ const Profile = () => {
                     {/* Upload Image */}
                     <div className="flex justify-center">
                         <div className="relative group">
-                            <div className="relative w-24 h-24 bg-gradient-to-br from-blue-400 via-purple-400 to-orange-400 rounded-full bg-transparent shadow-2xl">
+                            <div className="relative w-24 h-24 rounded-full bg-primary-dark/50 shadow-2xl">
                                 {previewUrl ? (
                                     <>
                                         <img
@@ -130,7 +134,7 @@ const Profile = () => {
                                             <FaTimes size={14} />
                                         </button>
                                     </>
-                                ) : singleUser?.photo && singleUser?.photo !== "null" ? (
+                                ) : (!imageRemoved && singleUser?.photo && singleUser?.photo !== "null") ? (
                                     <>
                                         <img
                                             src={`${IMAGE_URL}${singleUser?.photo}`}

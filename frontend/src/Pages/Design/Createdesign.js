@@ -150,7 +150,7 @@ const Createdesign = () => {
                 </div>
                 {/* Images Error Message */}
                 {errors.images && touched.images && (
-                    <div className="mt-2 text-red-600 text-sm">
+                    <div className="mt-2 text-red-600 font-medium text-sm">
                         {errors.images}
                     </div>
                 )}
@@ -171,7 +171,7 @@ const Createdesign = () => {
                                 }`}
                         />
                         {errors.title && touched.title && (
-                            <div className="mt-1 text-red-600 text-sm">
+                            <div className="mt-1 text-red-600 font-medium text-sm">
                                 {errors.title}
                             </div>
                         )}
@@ -190,7 +190,7 @@ const Createdesign = () => {
                                 }`}
                         />
                         {errors.description && touched.description && (
-                            <div className="mt-1 text-red-600 text-sm">
+                            <div className="mt-1 text-red-600 font-medium text-sm">
                                 {errors.description}
                             </div>
                         )}
@@ -209,7 +209,7 @@ const Createdesign = () => {
                                 }`}
                         />
                         {errors.price && touched.price && (
-                            <div className="mt-1 text-red-600 text-sm">
+                            <div className="mt-1 text-red-600 font-medium text-sm">
                                 {errors.price}
                             </div>
                         )}

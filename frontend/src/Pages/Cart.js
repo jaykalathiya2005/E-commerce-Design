@@ -109,147 +109,139 @@ const Cart = () => {
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
 
-            // Header
-            pdf.setFontSize(20);
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Embroidery Designs', 20, 20);
+            let yPosition = 20; // Start from top without main header
 
-            // Current date
-            pdf.setFontSize(10);
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - 60, 20);
+            // Function to get image dimensions and calculate size
+            const getImageDimensions = (base64Image) => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = function () {
+                        resolve({
+                            width: this.width,
+                            height: this.height
+                        });
+                    };
+                    img.src = base64Image;
+                });
+            };
 
-            let yPosition = 40;
-            const itemHeight = 60;
-            const imgSize = 40;
+            // Function to calculate PDF size maintaining aspect ratio
+            const calculatePDFSize = (imgWidth, imgHeight, maxWidth = 80, maxHeight = 100) => {
+                const aspectRatio = imgWidth / imgHeight;
+
+                let pdfWidth = maxWidth;
+                let pdfHeight = maxWidth / aspectRatio;
+
+                if (pdfHeight > maxHeight) {
+                    pdfHeight = maxHeight;
+                    pdfWidth = maxHeight * aspectRatio;
+                }
+
+                return { width: pdfWidth, height: pdfHeight };
+            };
 
             // Process each cart item
             for (let i = 0; i < cartItems.length; i++) {
                 const item = cartItems[i];
+                const images = item?.designData?.images || [];
 
-                // Check if we need a new page
-                if (yPosition + itemHeight > pageHeight - 30) {
+                // Check if we need a new page (except for first item)
+                if (i > 0) {
                     pdf.addPage();
                     yPosition = 20;
                 }
 
-                // single Image
-                // try {
-                //     // Load and add image
-                //     const imageUrl = `${IMAGE_URL}${item?.designData?.images?.[0]}`;
-                //     const base64Image = await getImageBase64(imageUrl);
+                // Item title as header
+                const title = item?.designData?.title || 'Untitled Item';
+                const titleLines = pdf.splitTextToSize(title, pageWidth - 40);
 
-                //     // Add image to PDF
-                //     pdf.addImage(base64Image, 'JPEG', 20, yPosition, imgSize, imgSize);
-                // } catch (error) {
-                //     console.error('Error loading image:', error);
-                //     // Draw placeholder rectangle if image fails to load
-                //     pdf.setDrawColor(200, 200, 200);
-                //     pdf.rect(20, yPosition, imgSize, imgSize);
-                //     pdf.setFontSize(8);
-                //     pdf.text('Image not available', 25, yPosition + 20);
-                // }
+                pdf.setFontSize(18);
+                pdf.setFont('helvetica', 'bold');
 
-                // Get available images (first two)
-                const images = item?.designData?.images || [];
-                const imagesToShow = images.slice(0, 2);
+                // Center the title
+                for (let lineIndex = 0; lineIndex < titleLines.length; lineIndex++) {
+                    const lineWidth = pdf.getTextWidth(titleLines[lineIndex]);
+                    const titleX = (pageWidth - lineWidth) / 2;
+                    pdf.text(titleLines[lineIndex], titleX, yPosition + (lineIndex * 7));
+                }
 
-                // Multiple images
-                for (let j = 0; j < imagesToShow.length; j++) {
+                yPosition += titleLines.length * 7 + 20;
+
+                // Handle images based on availability
+                if (images.length === 0) {
+                    // No images - show placeholder
+                    const placeholderWidth = 60;
+                    const placeholderHeight = 40;
+                    const imgX = (pageWidth - placeholderWidth) / 2;
+                    pdf.setDrawColor(200, 200, 200);
+                    pdf.rect(imgX, yPosition, placeholderWidth, placeholderHeight);
+                    pdf.setFontSize(8);
+                    pdf.text('No images available', imgX + 5, yPosition + 20);
+                    yPosition += placeholderHeight + 20;
+
+                } else if (images.length === 1) {
+                    // Single image - center it with actual dimensions
                     try {
-                        const imageUrl = `${IMAGE_URL}${imagesToShow[j]}`;
+                        const imageUrl = `${IMAGE_URL}${images[0]}`;
                         const base64Image = await getImageBase64(imageUrl);
+                        const imageDims = await getImageDimensions(base64Image);
+                        const pdfSize = calculatePDFSize(imageDims.width, imageDims.height);
 
-                        // Calculate position for multiple images
-                        const xPosition = 20 + (j * (imgSize + 5)); // 5mm gap between images
-
-                        // Add image to PDF
-                        pdf.addImage(base64Image, 'JPEG', xPosition, yPosition, imgSize, imgSize);
+                        const imgX = (pageWidth - pdfSize.width) / 2;
+                        pdf.addImage(base64Image, 'JPEG', imgX, yPosition, pdfSize.width, pdfSize.height);
+                        yPosition += pdfSize.height + 20;
                     } catch (error) {
-                        console.error(`Error loading image ${j + 1}:`, error);
-                        // Draw placeholder rectangle if image fails to load
-                        const xPosition = 20 + (j * (imgSize + 5));
+                        console.error('Error loading image:', error);
+                        const placeholderWidth = 60;
+                        const placeholderHeight = 40;
+                        const imgX = (pageWidth - placeholderWidth) / 2;
                         pdf.setDrawColor(200, 200, 200);
-                        pdf.rect(xPosition, yPosition, imgSize, imgSize);
+                        pdf.rect(imgX, yPosition, placeholderWidth, placeholderHeight);
                         pdf.setFontSize(8);
-                        pdf.text('Image not available', xPosition + 5, yPosition + 20);
+                        pdf.text('Image not available', imgX + 5, yPosition + 20);
+                        yPosition += placeholderHeight + 20;
+                    }
+
+                } else {
+                    // Multiple images - arrange vertically (one below another)
+                    for (let j = 0; j < images.length; j++) {
+                        try {
+                            const imageUrl = `${IMAGE_URL}${images[j]}`;
+                            const base64Image = await getImageBase64(imageUrl);
+                            const imageDims = await getImageDimensions(base64Image);
+                            const pdfSize = calculatePDFSize(imageDims.width, imageDims.height, 80, 80);
+
+                            // Check if we need a new page
+                            if (yPosition + pdfSize.height > pageHeight - 30) {
+                                pdf.addPage();
+                                yPosition = 20;
+                            }
+
+                            const imgX = (pageWidth - pdfSize.width) / 2;
+                            pdf.addImage(base64Image, 'JPEG', imgX, yPosition, pdfSize.width, pdfSize.height);
+                            yPosition += pdfSize.height + 15; // Space between images
+
+                        } catch (error) {
+                            console.error(`Error loading image ${j + 1}:`, error);
+
+                            // Check if we need a new page for placeholder
+                            const placeholderHeight = 40;
+                            if (yPosition + placeholderHeight > pageHeight - 30) {
+                                pdf.addPage();
+                                yPosition = 20;
+                            }
+
+                            const placeholderWidth = 60;
+                            const imgX = (pageWidth - placeholderWidth) / 2;
+                            pdf.setDrawColor(200, 200, 200);
+                            pdf.rect(imgX, yPosition, placeholderWidth, placeholderHeight);
+                            pdf.setFontSize(8);
+                            pdf.text(`Image ${j + 1} not available`, imgX + 5, yPosition + 20);
+                            yPosition += placeholderHeight + 15;
+                        }
                     }
                 }
-
-                // If no images available, show placeholder
-                if (imagesToShow.length === 0) {
-                    pdf.setDrawColor(200, 200, 200);
-                    pdf.rect(20, yPosition, imgSize, imgSize);
-                    pdf.setFontSize(8);
-                    pdf.text('No images available', 25, yPosition + 20);
-                }
-
-                // Item details
-                const textStartX = 70;
-
-                // Item title
-                pdf.setFontSize(14);
-                pdf.setFont('helvetica', 'bold');
-                const title = item?.designData?.title || 'Untitled Item';
-                const titleLines = pdf.splitTextToSize(title, pageWidth - textStartX - 20);
-                pdf.text(titleLines, textStartX, yPosition + 10);
-
-                // Item description
-                pdf.setFontSize(10);
-                pdf.setFont('helvetica', 'normal');
-                const description = item?.designData?.description || 'No description';
-                const descLines = pdf.splitTextToSize(description, pageWidth - textStartX - 20);
-                pdf.text(descLines, textStartX, yPosition + 20);
-
-                // // Price and quantity details
-                // pdf.setFontSize(10);
-                // pdf.setFont('helvetica', 'bold');
-                // pdf.text(`Price: ₹${item.price?.toFixed(2)}`, textStartX, yPosition + 35);
-                // pdf.text(`Quantity: ${item.quantity}`, textStartX + 60, yPosition + 35);
-                // pdf.text(`Total: ₹${(item.quantity * item.price)?.toFixed(2)}`, textStartX + 120, yPosition + 35);
-
-                // // Add separator line
-                // pdf.setDrawColor(200, 200, 200);
-                // pdf.line(20, yPosition + itemHeight - 5, pageWidth - 20, yPosition + itemHeight - 5);
-
-                yPosition += itemHeight;
             }
-
-            // Summary section
-            yPosition += 10;
-
-            // Check if we need a new page for summary
-            if (yPosition + 50 > pageHeight - 30) {
-                pdf.addPage();
-                yPosition = 20;
-            }
-
-            // Order summary
-            // pdf.setFontSize(16);
-            // pdf.setFont('helvetica', 'bold');
-            // pdf.text('Order Summary', 20, yPosition);
-
-            // yPosition += 15;
-            // pdf.setFontSize(12);
-            // pdf.setFont('helvetica', 'normal');
-
-            // // Summary details
-            // pdf.text(`Items (${cartItems?.length}):`, 20, yPosition);
-            // pdf.text(`₹${subtotal?.toFixed(2)}`, pageWidth - 60, yPosition);
-
-            // yPosition += 10;
-            // pdf.text('Shipping:', 20, yPosition);
-            // pdf.text(`₹${shipping.toFixed(2)}`, pageWidth - 60, yPosition);
-
-            // // Total line
-            // yPosition += 15;
-            // pdf.setDrawColor(0, 0, 0);
-            // pdf.line(20, yPosition - 5, pageWidth - 20, yPosition - 5);
-
-            // pdf.setFontSize(14);
-            // pdf.setFont('helvetica', 'bold');
-            // pdf.text('Total Cost:', 20, yPosition);
-            // pdf.text(`₹${totalCost.toFixed(2)}`, pageWidth - 60, yPosition);
 
             // Save the PDF
             pdf.save(`Embroidery Design.pdf`);
@@ -422,16 +414,16 @@ const Cart = () => {
                                             </div>
                                         </div>
 
-                                        {/* Checkout Button */}
-                                        <button className="w-full mb-2 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors">
-                                            CHECKOUT
-                                            {/* Checkout */}
-                                        </button>
-                                        {/* Print Button */}
-                                        <button className="w-full bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors" onClick={downloadPDF}>
-                                            PRINT
-                                            {/* Print */}
-                                        </button>
+                                        <div className="block md:flex justify-between">
+                                            {/* Checkout Button */}
+                                            <button className="w-full md:w-32 mb-2 md:mb-0 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors">
+                                                CHECKOUT
+                                            </button>
+                                            {/* Print Button */}
+                                            <button className="w-full md:w-32 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors" onClick={downloadPDF}>
+                                                PRINT
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -79,7 +79,7 @@ const Home = () => {
                     <div className='flex justify-center items-center min-h-[400px]'>
                         <div className='text-center'>
                             <div className="text-primary-dark font-bold text-[20px]">No results found. 😀</div>
-                            <p className="text-primary-light font-medium text-[15px] mt-2">It seems we can't find any results based on your search.</p>
+                            <p className="text-primary-dark/50 font-medium text-[15px] mt-2">It seems we can't find any results based on your search.</p>
                         </div>
                     </div>
                 ) : (

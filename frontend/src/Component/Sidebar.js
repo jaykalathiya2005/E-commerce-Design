@@ -74,13 +74,13 @@ const Sidebar = ({ children }) => {
                 fixed lg:relative
                 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 transition-transform duration-300 ease-in-out
-                w-64 bg-primary-light lg:bg-transparent  ${sidebarOpen ? 'z-50' : ''} h-full lg:h-auto
+                w-64 bg-primary-light lg:bg-transparent z-50 h-full lg:h-auto top-0
             `}>
                     {/* Mobile Close Button */}
                     <div className="lg:hidden flex justify-end p-4">
                         <button
                             onClick={closeSidebar}
-                            className="p-2 text-gray-600 hover:text-gray-800"
+                            className="p-2 text-black"
                         >
                             <FaTimes className="w-5 h-5" />
                         </button>

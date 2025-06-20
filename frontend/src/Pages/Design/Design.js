@@ -52,7 +52,7 @@ const Design = () => {
 
     const DeleteModal = () => (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="bg-primary-light/50 rounded-lg shadow-xl max-w-md w-full mx-4">
                 <div className="p-6">
                     {/* Modal Header */}
                     <div className="flex items-center justify-center mb-4">
@@ -63,10 +63,10 @@ const Design = () => {
 
                     {/* Modal Content */}
                     <div className="text-center">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            Delete Design ?
+                        <h3 className="text-lg font-semibold text-black mb-2">
+                            Delete Design
                         </h3>
-                        <p className="text-gray-600 mb-6">
+                        <p className="text-black/50 font-medium mb-6">
                             Are you sure you want to delete this design ?
                         </p>
                     </div>
@@ -81,7 +81,7 @@ const Design = () => {
                         </button>
                         <button
                             onClick={confirmDelete}
-                            className="flex-1 px-4 py-2 text-white bg-primary-dark hover:bg-primary-dark/90 rounded-lg font-medium transition-colors"
+                            className="flex-1 px-4 py-2 text-white bg-primary-dark/90 hover:bg-primary-dark/90 rounded-lg font-medium transition-colors"
                         >
                             Yes, Delete
                         </button>
@@ -130,7 +130,7 @@ const Design = () => {
                             <tr key={index} className="bg-primary-dark/10 text-black">
                                 <td className="px-4 py-2">
                                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                        <img src={`${IMAGE_URL}${design?.images?.[0]}`} alt={design.title} className='h-12' />
+                                        <img src={`${IMAGE_URL}${design?.images?.[0]}`} alt={design.title} className='h-12 object-cover rounded-lg' />
                                     </div>
                                 </td>
                                 <td className="px-4 py-2 font-medium text-sm lg:text-base">
@@ -168,7 +168,7 @@ const Design = () => {
                     <button
                         onClick={() => paginateDesign(currentPageDesign - 1)}
                         disabled={currentPageDesign === 1}
-                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-dark/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FaChevronLeft className="w-3 h-3 md:w-4 md:h-4 text-primary-dark" />
                     </button>
@@ -204,7 +204,7 @@ const Design = () => {
                     <button
                         onClick={() => paginateDesign(currentPageDesign + 1)}
                         disabled={currentPageDesign === totalDesignPages}
-                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-dark/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FaChevronRight className="w-3 h-3 md:w-4 md:h-4 text-primary-dark" />
                     </button>

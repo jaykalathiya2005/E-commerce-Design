@@ -150,7 +150,7 @@ const Order = () => {
                     <button
                         onClick={() => paginateorder(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-dark/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FaChevronLeft className="w-3 h-3 md:w-4 md:h-4 text-primary-dark" />
                     </button>
@@ -186,7 +186,7 @@ const Order = () => {
                     <button
                         onClick={() => paginateorder(currentPage + 1)}
                         disabled={currentPage === totalOrdersPages}
-                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-dark/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 rounded-lg border border-primary-dark hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FaChevronRight className="w-3 h-3 md:w-4 md:h-4 text-primary-dark" />
                     </button>
