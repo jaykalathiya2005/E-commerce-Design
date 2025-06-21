@@ -60,7 +60,7 @@ const SingleDesignPage = () => {
         } else {
             enqueueSnackbar('Please login to like this design.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -74,7 +74,7 @@ const SingleDesignPage = () => {
         } else {
             enqueueSnackbar('Please login to wishlist this design.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -110,7 +110,7 @@ const SingleDesignPage = () => {
             navigator.clipboard.writeText(window.location.href);
             enqueueSnackbar('Link copied to clipboard!', {
                 variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -152,6 +152,13 @@ const SingleDesignPage = () => {
     const handleAddtocart = () => {
         if (userId && token) {
             dispatch(addToCart({ designId: design._id, quantity, price: design.price }))
+        } else {
+            enqueueSnackbar('Please login to add to cart', {
+                variant: 'error', autoHideDuration: 3000, anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }
+            });
         }
     }
 

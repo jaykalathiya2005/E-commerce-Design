@@ -35,7 +35,7 @@ const Home = () => {
         } else {
             enqueueSnackbar('Please login to like this design.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -49,7 +49,7 @@ const Home = () => {
         } else {
             enqueueSnackbar('Please login to wishlist this design.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });

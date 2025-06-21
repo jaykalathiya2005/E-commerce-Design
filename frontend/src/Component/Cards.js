@@ -34,7 +34,7 @@
 //         } else {
 //             enqueueSnackbar('Please login to like this.', {
 //                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-//                     vertical: 'top', // Position at the top
+//                     vertical: 'bottom', // Position at the top
 //                     horizontal: 'right', // Position on the right
 //                 }
 //             });
@@ -52,7 +52,7 @@
 //         } else {
 //             enqueueSnackbar('Please login to add in wishlist.', {
 //                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-//                     vertical: 'top', // Position at the top
+//                     vertical: 'bottom', // Position at the top
 //                     horizontal: 'right', // Position on the right
 //                 }
 //             });
@@ -192,14 +192,14 @@ const Cards = ({ searchTerm = "" }) => {
             const action = heartStates[cardId] ? 'Removed from favorites' : 'Added to favorites';
             enqueueSnackbar(action, {
                 variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
         } else {
             enqueueSnackbar('Please login to like this.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -217,14 +217,14 @@ const Cards = ({ searchTerm = "" }) => {
             const action = bookmarkStates[cardId] ? 'Removed from wishlist' : 'Added to wishlist';
             enqueueSnackbar(action, {
                 variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
         } else {
             enqueueSnackbar('Please login to add in wishlist.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
@@ -279,7 +279,7 @@ const Cards = ({ searchTerm = "" }) => {
             navigator.clipboard.writeText(window.location.href);
             enqueueSnackbar('Link copied to clipboard!', {
                 variant: 'success', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });

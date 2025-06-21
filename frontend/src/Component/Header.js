@@ -42,7 +42,7 @@ const Header = ({ setSearchTerm, setSidebarOpen }) => {
         } else {
             enqueueSnackbar('Please login to go cart.', {
                 variant: 'warning', autoHideDuration: 3000, anchorOrigin: {
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'right',
                 }
             });
