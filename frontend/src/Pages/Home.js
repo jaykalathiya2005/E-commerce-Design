@@ -28,6 +28,34 @@ const Home = () => {
         }
     }, [])
 
+    // Get search history from localStorage
+    // const searchedDesigns = JSON.parse(localStorage.getItem('searchedDesigns') || '[]');
+
+    // // Reorder alldesign: searched items first, then the rest
+    // const prioritizedDesigns = [
+    //     ...alldesign.filter(card => searchedDesigns.includes(card._id)),
+    //     ...alldesign.filter(card => !searchedDesigns.includes(card._id))
+    // ];
+
+    // // Use prioritizedDesigns instead of alldesign for filtering
+    // const filteredCards = prioritizedDesigns.filter(card =>
+    //     card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     card.description.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+
+    // useEffect(() => {
+    //     if (searchTerm && filteredCards.length > 0) {
+    //         // Save the IDs of filtered cards to localStorage
+    //         const searchedIds = filteredCards.map(card => card._id);
+    //         localStorage.setItem('searchedDesigns', JSON.stringify(searchedIds));
+    //     }
+    // }, [searchTerm, filteredCards]);
+
+    const filteredCards = alldesign.filter(card =>
+        card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        card.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     // Function to toggle heart state for specific card
     const toggleHeart = (likeId) => {
         if (token && userId) {
@@ -60,11 +88,6 @@ const Home = () => {
     const openSingleView = (design) => {
         navigate(`/design/${design._id}`, { state: design });
     };
-
-    const filteredCards = alldesign?.filter(card =>
-        card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        card.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     return (
         <div>

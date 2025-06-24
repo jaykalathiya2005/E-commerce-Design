@@ -429,7 +429,7 @@ const Cart = () => {
                             </div>
                         ) : (
                             <div className="">
-                                <h1 className="text-2xl font-bold text-primary-dark">Shopping Cart</h1>
+                                <h1 className="text-2xl font-bold text-black">Shopping Cart</h1>
                                 <div className="text-2xl text-center font-bold flex flex-col items-center">
                                     <FaShoppingCart size={30} className="mb-4" />
                                     <p>Your Cart is Empty.</p>
