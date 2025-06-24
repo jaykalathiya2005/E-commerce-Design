@@ -23,6 +23,8 @@ const SingleDesignPage = () => {
     const usersDesign = useSelector((state) => state.design.allDesign)
         .filter((user) => user?.userId == SingleDesign?.userId)
         .filter((item) => item._id !== id);
+    console.log(usersDesign);
+
 
     useEffect(() => {
         dispatch(getdesignById(id))
@@ -599,7 +601,7 @@ const SingleDesignPage = () => {
                         </div>
 
                         {/* Portfolio Grid */}
-                        {usersDesign == 0 ? (
+                        {usersDesign.length == 0 ? (
                             <div className='flex justify-center items-center'>
                                 <div className='text-center'>
                                     <div className="text-black font-bold text-[20px]">This user has not uploaded more designs.</div>
@@ -607,7 +609,7 @@ const SingleDesignPage = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                                {usersDesign?.sort(() => Math.random() - 0.5).slice(0, 5).map((item, index) => (
+                                {usersDesign?.slice(0, 5).map((item, index) => (
                                     <div
                                         key={index}
                                         onClick={() => openSingleView(item)}
