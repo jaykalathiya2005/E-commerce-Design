@@ -20,8 +20,8 @@ const Header = ({ setSearchTerm, setSidebarOpen }) => {
     const singleuser = useSelector((state) => state.user.currUser)
 
     useEffect(() => {
-        dispatch(getUserById(userId))
         if (token && userId) {
+            dispatch(getUserById(userId))
             dispatch(getCart())
         }
     }, [])
