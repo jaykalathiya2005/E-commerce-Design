@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getAllUsers } from '../Redux/Slice/user.slice'
+import { getUserById } from '../Redux/Slice/user.slice'
 import { FaBars, FaSearch, FaTimes } from 'react-icons/fa'
 import { IconButton } from '@mui/material'
 import { FaCartShopping } from 'react-icons/fa6'
-import { addToCart, getCart } from '../Redux/Slice/design.slice'
+import { getCart } from '../Redux/Slice/design.slice'
 import { enqueueSnackbar } from 'notistack'
 import { IMAGE_URL } from '../Utils/baseUrl'
 
@@ -17,12 +17,10 @@ const Header = ({ setSearchTerm, setSidebarOpen }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const allUsers = useSelector((state) => state.user.allusers)
-
-    const singleuser = allUsers.find((user) => user._id == userId)
+    const singleuser = useSelector((state) => state.user.currUser)
 
     useEffect(() => {
-        dispatch(getAllUsers())
+        dispatch(getUserById(userId))
         if (token && userId) {
             dispatch(getCart())
         }
