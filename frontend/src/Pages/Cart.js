@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Header from '../Component/Header'
 import { FaChevronLeft, FaMinus, FaPlus, FaShoppingCart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,8 @@ import { getCart, removeCart, updateCart } from '../Redux/Slice/design.slice';
 import { IMAGE_URL } from '../Utils/baseUrl';
 import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
+import emptyCart from '../Image/empty cart.png'
+import { BsCartX } from "react-icons/bs";
 
 const Cart = () => {
 
@@ -267,9 +269,9 @@ const Cart = () => {
                                 {/* Left Section - Cart Items */}
                                 <div className="lg:col-span-2">
                                     <div className="flex items-center justify-between mb-8">
-                                        <h1 className="text-2xl font-bold text-black">Shopping Cart</h1>
+                                        <h1 className="text-lg md:text-2xl font-bold text-black">Shopping Cart</h1>
                                         {cartItems?.length > 0 && (
-                                            <span className="text-lg text-black font-bold">{cartItems?.length} Items</span>
+                                            <span className="text-base md:text-lg text-black font-bold">{cartItems?.length} Items</span>
                                         )}
                                     </div>
 
@@ -281,7 +283,8 @@ const Cart = () => {
                                         <div className="col-span-2 text-center">Total</div>
                                     </div>
                                     {/* Cart Items */}
-                                    <div className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
+                                    <div className={`space-y-4 sm:space-y-6 mt-4 sm:mt-6 ${cartItems?.length > 5 ? 'max-h-[375px] overflow-y-auto scrollbar-hide' : ''
+                                        }`}>
                                         {cartItems?.map((item, index) => (
                                             <div key={index} className="border-b border-black pb-4 lg:pb-0 lg:border-b-0">
                                                 {/* Mobile Layout */}
@@ -305,7 +308,7 @@ const Cart = () => {
                                                                     >
                                                                         <FaMinus size={14} />
                                                                     </button>
-                                                                    <span className="px-3 py-1.5 border-l border-r border-primary-dark min-w-[50px] text-center text-sm">
+                                                                    <span className="px-3 py-1.5 border-l border-r border-primary-dark min-w-[35px] text-center text-sm">
                                                                         {item.quantity}
                                                                     </span>
                                                                     <button
@@ -416,11 +419,11 @@ const Cart = () => {
 
                                         <div className="block md:flex justify-between">
                                             {/* Checkout Button */}
-                                            <button className="w-full md:w-32 mb-2 md:mb-0 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors">
+                                            <button className="w-full md:w-28 mb-2 md:mb-0 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors">
                                                 CHECKOUT
                                             </button>
                                             {/* Print Button */}
-                                            <button className="w-full md:w-32 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors" onClick={downloadPDF}>
+                                            <button className="w-full md:w-28 bg-primary-dark/50 text-black py-3 rounded-lg font-medium hover:bg-primary-dark/60 transition-colors" onClick={downloadPDF}>
                                                 PRINT
                                             </button>
                                         </div>
@@ -429,10 +432,18 @@ const Cart = () => {
                             </div>
                         ) : (
                             <div className="">
-                                <h1 className="text-2xl font-bold text-black">Shopping Cart</h1>
-                                <div className="text-2xl text-center font-bold flex flex-col items-center">
-                                    <FaShoppingCart size={30} className="mb-4" />
+                                <h1 className="text-lg md:text-2xl font-bold text-black">Shopping Cart</h1>
+                                <div className="text-base md:text-2xl text-center font-bold flex flex-col items-center">
+                                    {/* <FaShoppingCart size={80} className="mb-4 mt-4" />
+                                    <BsCartX size={80} className="mb-4 mt-4" /> */}
+                                    <img src={emptyCart} alt='emptyCart' className='h-52 w-52 object-contain' />
                                     <p>Your Cart is Empty.</p>
+                                </div>
+                                <div className="mt-2 lg:mt-8 pt-2 lg:pt-6 border-0 border-t border-black">
+                                    <button className="flex items-center text-black font-semibold" onClick={handleHome}>
+                                        <FaChevronLeft size={20} className="mr-2" />
+                                        Continue Shopping
+                                    </button>
                                 </div>
                             </div>
                         )}

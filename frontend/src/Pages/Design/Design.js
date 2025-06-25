@@ -52,7 +52,7 @@ const Design = () => {
 
     const DeleteModal = () => (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-primary-light/50 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="bg-primary-light rounded-lg shadow-xl max-w-md w-full mx-4">
                 <div className="p-6">
                     {/* Modal Header */}
                     <div className="flex items-center justify-center mb-4">
@@ -75,13 +75,14 @@ const Design = () => {
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
                             onClick={cancelDelete}
+                            // text-white bg-primary-dark/90 hover:bg-primary-dark
                             className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={confirmDelete}
-                            className="flex-1 px-4 py-2 text-white bg-primary-dark/90 hover:bg-primary-dark/90 rounded-lg font-medium transition-colors"
+                            className="flex-1 px-4 py-2 text-white bg-primary-dark/90 hover:bg-primary-dark rounded-lg font-medium transition-colors"
                         >
                             Yes, Delete
                         </button>
