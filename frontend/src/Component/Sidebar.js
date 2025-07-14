@@ -12,6 +12,7 @@ import Header from './Header';
 const Sidebar = ({ children }) => {
     const [openSubmenu, setOpenSubmenu] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const userId = sessionStorage.getItem('userId');
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,16 +26,33 @@ const Sidebar = ({ children }) => {
         setSidebarOpen(false);
     };
 
+    // const handleLogout = () => {
+    //     try {
+    //         if (userId) {
+    //             dispatch(logoutUser(userId));
+    //             navigate('/');
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
     const handleLogout = () => {
-        try {
-            if (userId) {
-                dispatch(logoutUser(userId));
-                navigate('/');
-            }
-        } catch (error) {
-            console.log(error)
+        setShowLogoutModal(true); // <-- Show modal instead of logging out immediately
+    };
+
+    const confirmLogout = () => {
+        const userId = sessionStorage.getItem('userId');
+        if (userId) {
+            dispatch(logoutUser(userId));
+            navigate('/');
         }
-    }
+        setShowLogoutModal(false);
+    };
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false);
+    };
 
     const pages = [
         { title: 'Dashboard', icon: <LuLayoutDashboard />, path: '/dashboard' },
@@ -142,6 +160,31 @@ const Sidebar = ({ children }) => {
                         </nav>
                     </div>
                 </div>
+
+                {showLogoutModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                        <div className="bg-primary-light rounded-lg shadow-xl max-w-md w-full p-6">
+                            <h2 className="text-lg text-center font-semibold mb-4">Confirm Logout</h2>
+                            <p className="mb-6 font-medium text-center">Are you sure you want to log out?</p>
+                            {/* Modal Actions */}
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button
+                                    onClick={cancelLogout}
+                                    // text-white bg-primary-dark/90 hover:bg-primary-dark
+                                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmLogout}
+                                    className="flex-1 px-4 py-2 text-white bg-primary-dark/90 hover:bg-primary-dark rounded-lg font-medium transition-colors"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Main Content */}
                 {/* pt-8 */}

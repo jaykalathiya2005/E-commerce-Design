@@ -142,7 +142,7 @@ const Createdesign = () => {
                             type="file"
                             accept="image/*"
                             multiple
-                            className="hidden"
+                            className="hidden j_input_style"
                             onChange={handleImageChange}
                         />
 
@@ -165,7 +165,7 @@ const Createdesign = () => {
                             value={values.title}
                             onChange={handleChange}
                             placeholder="Enter Your Design Title"
-                            className={`w-full px-3 md:px-4 py-2 font-medium bg-primary-dark/60 text-black placeholder:text-black md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.title && touched.title
+                            className={`j_input_style w-full px-3 md:px-4 py-2 font-medium bg-primary-dark/60 text-black placeholder:text-black md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.title && touched.title
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -184,7 +184,7 @@ const Createdesign = () => {
                             value={values.description}
                             onChange={handleChange}
                             placeholder="Enter Your Design Description"
-                            className={`w-full px-3 md:px-4 py-2 md:py-3 font-medium bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.description && touched.description
+                            className={`j_input_style w-full px-3 md:px-4 py-2 md:py-3 font-medium bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.description && touched.description
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -203,7 +203,7 @@ const Createdesign = () => {
                             value={values.price}
                             onChange={handleChange}
                             placeholder="Enter Your Design price"
-                            className={`w-full px-3 md:px-4 py-2 bg-primary-dark/60 font-medium text-black placeholder:text-black md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.price && touched.price
+                            className={`j_input_style w-full px-3 md:px-4 py-2 bg-primary-dark/60 font-medium text-black placeholder:text-black md:py-3 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base ${errors.price && touched.price
                                 ? 'border-red-500'
                                 : 'border-gray-300'
                                 }`}
@@ -229,7 +229,7 @@ const Createdesign = () => {
                         type="submit"
                         className="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 bg-primary-dark/50 text-black rounded-full hover:bg-primary-dark/60 transition-colors font-medium text-sm md:text-base"
                     >
-                        {id ? "update" : "Submit"}
+                        {id ? "Update" : "Submit"}
                     </button>
                 </div>
             </form>

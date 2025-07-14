@@ -94,13 +94,13 @@ exports.getdesignById = async (req, res) => {
         if (!designWithUser || designWithUser.length === 0) {
             return res.status(404).json({
                 status: 404,
-                message: "design not found",
+                message: "Design Not Found",
             });
         }
 
         return res.status(200).json({
             status: 200,
-            message: "design found successfully",
+            message: "Design Found Successfully",
             Design: designWithUser[0],
         });
     } catch (error) {
@@ -346,7 +346,7 @@ exports.removedesignCart = async (req, res) => {
         res.status(200).json({
             status: 200,
             success: true,
-            message: 'cart item delete',
+            message: 'Cart Item Delete',
             deleteProdFromCart
         });
     } catch (error) {
@@ -364,7 +364,7 @@ exports.updateQuentityFromCart = async (req, res) => {
         res.status(200).json({
             status: 200,
             success: true,
-            message: 'cart item update',
+            message: 'Cart Item Update',
             cartItem
         });
     } catch (error) {

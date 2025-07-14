@@ -160,7 +160,7 @@ const Profile = () => {
                                 <input
                                     type="file"
                                     id="profileImageInput"
-                                    className="hidden"
+                                    className="hidden j_input_style"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                 />
@@ -208,7 +208,7 @@ const Profile = () => {
                             <input
                                 type="file"
                                 accept="image/*"
-                                className="hidden"
+                                className="hidden j_input_style"
                                 id="profileImageInput"
                                 onChange={handleImageUpload}
                             />
@@ -230,7 +230,7 @@ const Profile = () => {
                                 placeholder="Enter Your Full Name"
                                 value={values?.userName}
                                 onChange={handleChange}
-                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="j_input_style w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                             {errors.userName && touched.userName && (
                                 <div className="mt-2 text-red-600 text-sm">
@@ -246,7 +246,7 @@ const Profile = () => {
                                 placeholder="Enter Your Email Address"
                                 value={values?.email}
                                 disabled
-                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="j_input_style w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                         </div>
                     </div>
@@ -261,7 +261,7 @@ const Profile = () => {
                                 placeholder="Enter Your Contact Number"
                                 value={values?.phone}
                                 onChange={handleChange}
-                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
+                                className="j_input_style w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base"
                             />
                             {errors.phone && touched.phone && (
                                 <div className="mt-2 text-red-600 text-sm">
@@ -277,7 +277,7 @@ const Profile = () => {
                                 placeholder="Date of Birth"
                                 value={values?.dob}
                                 onChange={handleChange}
-                                className="w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base [&::-webkit-calendar-picker-indicator]:filter"
+                                className="j_input_style w-full font-medium px-3 md:px-4 py-2 md:py-3 bg-primary-dark/60 text-black placeholder:text-black rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent outline-none transition-all text-sm md:text-base [&::-webkit-calendar-picker-indicator]:filter"
                             />
                             {errors.dob && touched.dob && (
                                 <div className="mt-2 text-red-600 text-sm">

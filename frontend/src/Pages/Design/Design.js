@@ -12,7 +12,7 @@ const Design = () => {
     const [currentPageDesign, setCurrentPageDesign] = useState(1);
     const [designsPerPage] = useState(10);
     const userId = sessionStorage.getItem('userId');
-    const alldesign = useSelector((state) => state.design.allDesign).filter((design) => design.userId == userId);
+    const alldesign = useSelector((state) => state.design.allDesign)?.filter((design) => design.userId == userId);
     const [showDeleteModal, setDeleteModal] = useState(false);
     const [DeleteDesign, setDeleteDesign] = useState(null);
 

@@ -101,8 +101,8 @@ const Header = ({ setSearchTerm, setSidebarOpen }) => {
                                     <FaCartShopping className="h-4 w-4" />
                                 </div>
                                 {cartItems?.length > 0 && (
-                                    <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
-                                        <span className="text-white text-sm font-medium">
+                                    <div className="w-[18px] h-[18px] absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                        <span className="text-white text-[11px] font-medium">
                                             {cartItems?.length}
                                         </span>
                                     </div>
@@ -198,8 +198,8 @@ const Header = ({ setSearchTerm, setSidebarOpen }) => {
                                         <FaCartShopping className="h-4 w-4" />
                                     </div>
                                     {cartItems?.length > 0 && (
-                                        <div className="w-5 h-5 absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
-                                            <span className="text-white text-sm font-medium">
+                                        <div className="w-[18px] h-[18px] absolute -top-1 -right-1 bg-red-600 rounded-full flex justify-center items-center">
+                                            <span className="text-white text-[11px] font-medium">
                                                 {cartItems?.length}
                                             </span>
                                         </div>

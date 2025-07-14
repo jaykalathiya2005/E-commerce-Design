@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { forgotPassword, googleLogin, login, register, resetPassword, verifyOtp } from '../Redux/Slice/auth.slice';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -105,7 +105,7 @@ const OTPInput = ({ length = 4, onComplete, resendTimer, setResendTimer, handleV
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onPaste={handlePaste}
-              className="w-10 h-10 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-10 h-10 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
               maxLength={1}
             />
           ))}
@@ -124,7 +124,7 @@ const OTPInput = ({ length = 4, onComplete, resendTimer, setResendTimer, handleV
         </div> */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white rounded-lg py-2.5 font-semibold hover:bg-blue-600 transition-colors"
+          className="w-full bg-primary-dark/90 text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
         >
           Verify
         </button>
@@ -243,7 +243,25 @@ const Login = () => {
     }
   };
 
+  const googleL = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log(tokenResponse);
+      const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      });
+      const userInfo = await res.json();
 
+      // const decodedToken = jwtDecode(tokenResponse.access_token);
+      const { name, email, sub: uid } = userInfo;
+
+      dispatch(googleLogin({ uid, userName: name, email })).then((response) => {
+        if (response.payload) navigate('/');
+      });
+    },
+    // scope: 'profile email https://www.googleapis.com/auth/user.phonenumbers.read https://www.googleapis.com/auth/user.gender.read',
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -274,7 +292,7 @@ const Login = () => {
                         placeholder="User Name"
                         value={values.userName}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <ErrorMessage name="userName" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -286,7 +304,7 @@ const Login = () => {
                         placeholder="Email"
                         value={values.email}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -326,7 +344,7 @@ const Login = () => {
                         placeholder="Password"
                         value={values.password}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <div
                         className="absolute right-3 top-3 cursor-pointer select-none text-black"
@@ -357,7 +375,7 @@ const Login = () => {
                       </div>
                     </div>
 
-                    <GoogleLogin
+                    {/* <GoogleLogin
                       onSuccess={response => {
                         const { name, email, sub: uid } = jwtDecode(response.credential);
                         console.log(name, email, uid);
@@ -376,7 +394,11 @@ const Login = () => {
                           <span>Continue with Google</span>
                         </button>
                       )}
-                    />
+                    /> */}
+                    <button onClick={() => googleL()} className="w-full flex items-center justify-center bg-transparent text-black border border-black/50 py-2 rounded">
+                      <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google" className="mr-2" />
+                      Sign in with Google
+                    </button>
                   </div>
                 </Form>
               )}
@@ -428,10 +450,10 @@ const Login = () => {
                         placeholder="New Password"
                         value={values.newPassword}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-blue-500"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showNewPassword', !values.showNewPassword);
@@ -450,10 +472,10 @@ const Login = () => {
                         placeholder="Confirm Password"
                         value={values.confirmPassword}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <div
-                        className="absolute right-3 top-3 cursor-pointer select-none text-blue-500"
+                        className="absolute right-3 top-3 cursor-pointer select-none text-black"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setFieldValue('showConfirmPassword', !values.showConfirmPassword);
@@ -467,7 +489,7 @@ const Login = () => {
                     </div>
                     <button
                       type="submit"
-                      className="w-full bg-blue-500 text-white rounded-lg py-2.5 font-semibold hover:bg-blue-600 transition-colors"
+                      className="w-full bg-primary-dark/90 text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Change Password
                     </button>
@@ -509,7 +531,7 @@ const Login = () => {
                         placeholder="Email"
                         value={values.email}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -521,7 +543,7 @@ const Login = () => {
                         placeholder="Password"
                         value={values.password}
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                       />
                       <div
                         className="absolute right-3 top-3 cursor-pointer select-none text-black"
@@ -557,7 +579,7 @@ const Login = () => {
                       </div>
                     </div>
 
-                    <GoogleLogin
+                    {/* <GoogleLogin
                       onSuccess={response => {
                         const { name, email, sub: uid } = jwtDecode(response.credential);
                         dispatch(googleLogin({ uid, userName: name, email })).then((response) => {
@@ -576,7 +598,11 @@ const Login = () => {
                           <span className='text-right flex-grow-0'>Continue with Google</span>
                         </button>
                       )}
-                    />
+                    /> */}
+                    <button onClick={() => googleL()} className="w-full flex items-center justify-center bg-transparent text-black border border-black/50 py-2 rounded">
+                      <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google" className="mr-2" />
+                      Sign in with Google
+                    </button>
                   </div>
                 </Form>
               )}
@@ -612,14 +638,14 @@ const Login = () => {
                         name="email"
                         placeholder="Enter your email"
                         onChange={handleChange}
-                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-gray-100 border-none px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light"
                         ref={(input) => input && input.focus()}
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
                     <button
                       type="submit"
-                      className="w-full bg-blue-500 text-white rounded-lg py-2.5 font-semibold hover:bg-blue-600 transition-colors"
+                      className="w-full bg-primary-dark/90 text-white rounded-lg py-2.5 font-semibold hover:bg-primary-dark transition-colors"
                     >
                       Send OTP
                     </button>

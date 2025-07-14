@@ -21,3 +21,14 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+.j_input_style:-webkit-autofill,
+.j_input_style:-webkit-autofill:focus,
+.j_input_style:-webkit-autofill:hover,
+.j_input_style:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: black;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 30px 30px rgb(99 107 47 / 60%);
+}
