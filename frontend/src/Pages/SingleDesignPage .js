@@ -120,7 +120,7 @@ const ShareModal = ({ isOpen, onClose, design, currentUrl }) => {
                 }`}>
                 {/* Modal Header */}
                 <div className="flex items-center justify-between p-3 sm:p-6 border-b border-black/50">
-                    <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    <h2 className="text-base sm:text-xl font-bold text-gray-900 flex items-center gap-2">
                         {/* <FaShare className="text-blue-600" /> */}
                         Share Design
                     </h2>
@@ -128,7 +128,7 @@ const ShareModal = ({ isOpen, onClose, design, currentUrl }) => {
                         onClick={handleClose}
                         className="text-black/50 hover:text-black transition-colors"
                     >
-                        <FaTimes size={20} />
+                        <FaTimes className='text-base sm:text-xl' />
                     </button>
                 </div>
 
@@ -278,20 +278,21 @@ const SingleDesignPage = () => {
 
     // Handle share
     const handleShare = () => {
+        setShowShareModal(true);
         // Try native share first (mobile devices)
-        if (navigator.share && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            navigator.share({
-                title: design.title,
-                text: design.description,
-                url: window.location.href
-            }).catch(() => {
-                // Fallback to custom modal if native share fails
-                setShowShareModal(true);
-            });
-        } else {
-            // Use custom modal for desktop
-            setShowShareModal(true);
-        }
+        // if (navigator.share && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        //     navigator.share({
+        //         title: design.title,
+        //         text: design.description,
+        //         url: window.location.href
+        //     }).catch(() => {
+        //         // Fallback to custom modal if native share fails
+        //         setShowShareModal(true);
+        //     });
+        // } else {
+        //     // Use custom modal for desktop
+        //     setShowShareModal(true);
+        // }
     };
     // const handleShare = () => {
     //     if (navigator.share && design) {
