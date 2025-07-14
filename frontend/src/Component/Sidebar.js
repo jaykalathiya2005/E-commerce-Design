@@ -163,9 +163,9 @@ const Sidebar = ({ children }) => {
 
                 {showLogoutModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                        <div className="bg-primary-light rounded-lg shadow-xl max-w-md w-full p-6">
-                            <h2 className="text-lg text-center font-semibold mb-4">Confirm Logout</h2>
-                            <p className="mb-6 font-medium text-center">Are you sure you want to log out?</p>
+                        <div className="bg-primary-light rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+                            <h2 className="text-base sm:text-lg text-center font-semibold mb-1 sm:mb-4">Confirm Logout</h2>
+                            <p className="mb-4 sm:mb-6 font-medium text-[15px] sm:text-base text-center">Are you sure you want to log out?</p>
                             {/* Modal Actions */}
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <button
